@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="assets/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <title>Scoreboard</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+<div class="main">
+    <div class="header">
+        <div>
+            <div class="audio" id="music"><button>Music</button></div>
+            <div class="audio" id="intros"><button>Introductions</button></div>
+            <div class="audio" id="anthem"><button>National Anthem</button></div>
+        </div>
+        <div>
+            <div class="audio" id="clear"><button>Clear Audio</button></div>
+            <div class="audio" id="buzzer"><button>Buzzer</button></div>
+            <div class="audio"><button id="timeout">Timeout/Segment Break</button></div>
+        </div>
+        <div>
+            <iframe id="preview" src="assets/display.html"></iframe>
+        </div>
+        <div></div>
+        <div class="period_div">
+            <div class="period" id="m_per"><button>-</button></div>
+            <div><h3 id="num_per">Period: 1</h3></div>
+            <div class="period" id="p_per"><button>+</button></div>
+        </div>
+    </div>
+    <div class="container">
+            <div class="visitor">
+            <input type="text" id="v_name" name="v_name" class="team_name" value="Away">
+            <h3 id="v_score">Score: 0</h3>
+            <button id="v_p3">+3</button><br>
+            <button id="v_p2">+2</button><br>
+            <button id="v_p1">+1</button><br>
+            <button id="v_m1">-1</button><br><br>
+            <p id="v_foul">Fouls: 0</p>
+            <button id="v_foul_p1">Foul: +1</button><br>
+            <button id="v_foul_m1">Foul: -1</button><br><br>
+            <p id="v_tol">TOL: 1</p>
+            <button id="v_tol_p1">TOL: +1</button><br>
+            <button id="v_tol_m1">TOL: -1</button>
+        </div>
+        <div class="time">
+            <button class="possession" id="guest_possession"><</button> <button class="possession" id="home_possession">></button><br><br>
+            <p id="time_display">Time Edit: 4:00.0</p>
+            <input type="number" id="min" name="min" class="time_enter" value=4> : <input type="number" id="sec" name="sec" class="time_enter" value=0> . <input type="number" id="tenth" name="tenth" class="time_enter" value=0><br>
+            <button id="update_time">Update Time</button><br>
+            <button id="time_in">Time In</button><br><br>
+            <button id="switch_sides"><-- Switch Sides --></button><br>
+            <button id="freeze">Freeze</button><br>
+            <button id="cover">Cover</button><br>
+            <button id="flag">Flag</button><br><br>
+            <input type="time" id="countdown_time" class="countdown_time" value="09:00"><br>
+            <button id="countdown">Countdown</button><br>
+            <p>Current Score Differential</p>
+            <p id="differential">0</p>
+            <div><a href="assets/display.html" target="_blank"><button style="background: blue">Open Display</button></a></div>
+            <div><button id="reset_fouls" class="footer">RESET FOULS</button></div>
+            <div><button id="reset" class="footer">RESET GAME</button></div>
+        </div>
+        <div class="home">
+            <input type="text" id="h_name" name="h_name" class="team_name" value="Home">
+            <h3 id="h_score">Score: 0</h3>
+            <button id="h_p3">+3</button><br>
+            <button id="h_p2" onclick="this.blur();">+2</button><br>
+            <button id="h_p1">+1</button><br>
+            <button id="h_m1">-1</button><br><br>
+            <p id="h_foul">Fouls: 0</p>
+            <button id="h_foul_p1">Foul: +1</button><br>
+            <button id="h_foul_m1">Foul: -1</button><br><br>
+            <p id="h_tol">TOL: 1</p>
+            <button id="h_tol_p1">TOL: +1</button><br>
+            <button id="h_tol_m1">TOL: -1</button>
+        </div>
+
+    </div>
+</div>
+</body>
+<script src="assets/app.js"></script>
+</html>

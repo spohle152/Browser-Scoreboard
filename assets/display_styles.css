@@ -1,0 +1,203 @@
+* {
+    font-family: "Bebas Neue", serif;
+    font-weight: 400;
+    font-style: normal;
+    -webkit-text-stroke: 0.2dvh black;
+    text-shadow: black 1dvh 1dvh 1dvh;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+* button, * input{
+    background:rgba(255, 255, 255, 0.25);
+    border: solid 1px white;
+    border-radius: 5px;
+    backdrop-filter: blur(2px);
+    cursor: pointer;
+    text-align: center;
+}
+* button:hover {
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.55); 
+}
+body {
+    overflow: hidden; /* Hide scrollbars */
+    background: linear-gradient(rgba(0, 0, 0, 0.85) 50%, rgba(0, 0, 0, 0.85)), url("background.jpg");
+    background-size: cover;
+}
+html {
+    background: #000;
+}
+.top  {
+    display: grid;
+    grid-template-columns: 1fr 8fr 1fr;
+    width: 100dvw;
+    text-align: center;
+    height: 45dvh;
+}
+.bottom  {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1.5fr;
+    width: 100dvw;
+    text-align: center;
+    height: 21dvh;
+}
+.middle {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: 100dvw;
+    height: 34dvh;
+    text-align: center;
+}
+.left {
+    background: rgba(0, 255, 0, 0.15);
+    border-right: 3px solid white;
+    height: 100%;
+}
+.right{
+    background: rgba(255, 255, 255, 0.15);
+    border-left: 3px solid white;
+    height: 100%;
+}
+.time {
+    border-bottom: 3px solid white;
+    height:100%;
+    background:rgba(255, 255, 0, 0.15);
+}
+.fouls {
+    border-top: 3px solid white;
+    border-left: 3px solid white;
+    border-right: 3px solid white;
+    background: rgba(255, 125, 0, 0.25);
+    height:100%;
+}
+.top_side {
+    display:block;
+}
+.top_side img {
+    height:20dvh;
+    width: auto;
+    padding-top: 2dvh;
+}
+.top_side p {
+    font-size: 9dvh;
+    line-height: 9dvh;
+}
+.time h1 {
+    font-size: 45dvh;
+    line-height: 35dvh;
+    margin-top: 1dvh;
+}
+.time h3 {
+    font-size: 12dvh;
+    line-height: 8dvh;
+}
+.bottom_side {
+    grid-template-columns: 1fr 1fr;
+    display:grid;
+}
+.score {
+    height: 34dvh;
+}
+.score h1 {
+    font-size: 52dvh;
+    line-height: 33dvh;
+    position:relative;
+    z-index: 2;
+    margin-top: 7dvh;
+}
+.bottom_side h3{
+    font-size: 8dvh;
+    line-height: 5dvh;
+}
+.bottom_side h2 {
+    font-size: 15dvh;
+    line-height: 8dvh;
+}
+.fouls h3 {
+    font-size: 7dvh;
+    line-height: 4dvh;
+    padding-top: 2dvh;
+}
+.fouls h2 {
+    font-size: 15dvh;
+    line-height: 15dvh;
+}
+.cover_image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    background: linear-gradient(rgba(0, 0, 0, 0.75) 50%, rgba(0, 0, 0, 0.75)), url("background.jpg");
+    background-size: cover;
+    height: 100dvh;
+    width: 100dvw;
+    z-index: 3;
+}
+.countdown_image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    background: linear-gradient(rgba(0, 0, 0, 0.75) 50%, rgba(0, 0, 0, 0.75)), url("background.jpg");
+    background-size: cover;
+    height: 100dvh;
+    width: 100dvw;
+    z-index: 3;
+}
+.countdown_image h1 {
+    text-align: center;
+    font-size: 40dvh;
+}
+.countdown_image_img {
+    display:flex;
+    justify-content: center;
+}
+.countdown_image_img img {
+    height: 45dvh;
+    width: auto;
+    filter: invert(1) brightness(1.75);
+    position: relative;
+    z-index: 100;
+}
+.cover_image_img {
+    display:flex;
+    justify-content: center;
+}
+.cover_image_img img {
+    height: 75dvh;
+    width: auto;
+    padding-top: 20dvh;
+    filter: invert(1) brightness(1.75);
+    position: relative;
+    z-index: 100;
+}
+.flag {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    background: linear-gradient(rgba(0, 0, 0, 0.15) 50%, rgba(0, 0, 0, 0.15)), url("american flag.jpg");
+    background-size: cover;
+    height: 100dvh;
+    width: 100dvw;
+    z-index: 3;
+}
+#right_score {
+    text-align: right;
+    padding-right: 3dvw;
+}
+#left_score {
+    text-align: left;
+    padding-left: 3dvw;
+}
+.other_stats {
+    display:flex;
+    margin-top: 8dvh;
+}
+.period_team_names {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+}
