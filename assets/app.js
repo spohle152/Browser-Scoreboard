@@ -1,5 +1,5 @@
 //User Variables
-var num_music = 99;
+var num_music = 0;
 
 //Music and buzzer buttons
 var music = document.getElementById('music');
@@ -858,9 +858,11 @@ function load_data() {
     }
     if (localStorage.getItem("total_per") != null){
         total_per.value = parseInt(localStorage.getItem("total_per"));
+        num_periods = total_per.value;
     }
     else {
         total_per.value = "4";
+        num_periods = total_per.value;
     }
     if (localStorage.getItem("possession") == "home") {
         l_poss.classList.add("active_button");
