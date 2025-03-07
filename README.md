@@ -1,3 +1,5 @@
 Browser Scoreboard
 
 This is a scoreboard that has a controller in one window/tab and a display to put on a screen to act as a scoreboard on the other tab/window. To use all the features of this, you need to put several audio files into the 'assets/Music' folder. These should be titled 'audio-1.mp3','audio-2.mp3', and so on. The highest number on the audio files needs to be added to the num_music variable at the top (line 2) of the 'assets/app.js' file. There needs to be an 'anthem.mp3' audio file in the assets folder. This will be played when the National Anthem is played. There needs to be an 'american flag.jpg' image file to be shown when the flag button is selected in the assets folder. There needs to be an 'intro.mp3' audio file in the assets folder to be played by the 'Introductions' button. A 'logo.png' needs to be placed in the assets folder to be shown on the countdown screen and cover screen.
+
+NOTE: This application has only been tested to work on Chromium based browsers (Brave in particular).

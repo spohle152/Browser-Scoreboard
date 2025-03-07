@@ -1,5 +1,5 @@
 //User Variables
-var num_music = 0;
+var num_music = 99;
 
 //Music and buzzer buttons
 var music = document.getElementById('music');
@@ -185,7 +185,9 @@ document.addEventListener('keydown', (event) => {
             document.activeElement.blur();
             update_data();
         } else if (event.key == 'ArrowUp') {
-            period++; //Go to next period
+            if (period < num_periods) {
+                period++; //Go to next period
+            }
             update_data(); //Update the content on the screen and in the file
             if ((num_periods / 2 + 1) == period) {
                 if (confirm("HALFTIME: Do you need to reset fouls?")) {
@@ -313,13 +315,10 @@ total_per.addEventListener("input", (event) => {
 countdown_time.addEventListener("input", (event) => {
     localStorage.setItem("countdown_time", countdown_time.value);
 });
-min_enter.addEventListener(`focus`, () => min_enter.select());
-sec_enter.addEventListener(`focus`, () => sec_enter.select());
-tenth_enter.addEventListener(`focus`, () => tenth_enter.select());
 h_name.addEventListener(`focus`, () => h_name.select());
 v_name.addEventListener(`focus`, () => v_name.select());
 min_enter.addEventListener("input", (event) => {
-    if (min_enter.value <= -1) {
+    if (parseInt(min_enter.value, 10) <= -1) {
         min_enter.value = "0";
         sec_enter.value = "00";
         tenth_enter.value = "0";
@@ -329,7 +328,7 @@ min_enter.addEventListener("input", (event) => {
     localStorage.setItem("tenth_enter", tenth_enter.value);
 });
 sec_enter.addEventListener("input", (event) => {
-    sec_enter.value = parseFloat(sec_enter.value);
+    sec_enter.value = parseInt(sec_enter.value);
     if (sec_enter.value == 60) {
         min_enter.value = (parseInt(min_enter.value) + 1);
         sec_enter.value = "00"
@@ -484,7 +483,9 @@ m_per.addEventListener("click", function() {
     update_data(); //Update the content on the screen and in the file
 });
 p_per.addEventListener("click", function() {
-    period++; //Go to next period
+    if (period < num_periods) {
+        period++; //Go to next period
+    }
     update_data(); //Update the content on the screen and in the file
     if ((num_periods / 2 + 1) == period) {
         if (confirm("HALFTIME: Do you need to reset fouls?")) {
@@ -577,9 +578,9 @@ update_time.addEventListener("click", function() {
             }
         }
     }
-    min = min_enter.value;
-    sec = sec_enter.value;
-    tenth = tenth_enter.value;
+    min = parseInt(min_enter.value, 10);
+    sec = parseInt(sec_enter.value, 10);
+    tenth = parseInt(tenth_enter.value, 10);
     update_data();
 });
 reset.addEventListener("click", function() {
@@ -841,25 +842,25 @@ function load_data() {
         min_enter.value = parseInt(localStorage.getItem("min_enter"));
     }
     else {
-        min_enter = "4";
+        min_enter.value = "8";
     }
     if (localStorage.getItem("sec_enter") != null){
         sec_enter.value = parseInt(localStorage.getItem("sec_enter"));
     }
     else {
-        sec_enter = "00";
+        sec_enter.value = "00";
     }
     if (localStorage.getItem("tenth_enter") != null){
         tenth_enter.value = parseInt(localStorage.getItem("tenth_enter"));
     }
     else {
-        tenth_enter = "0";
+        tenth_enter.value = "0";
     }
     if (localStorage.getItem("total_per") != null){
         total_per.value = parseInt(localStorage.getItem("total_per"));
     }
     else {
-        min_enter = "4";
+        total_per.value = "4";
     }
     if (localStorage.getItem("possession") == "home") {
         l_poss.classList.add("active_button");
