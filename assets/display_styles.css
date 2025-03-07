@@ -52,12 +52,10 @@ html {
     text-align: center;
 }
 .left {
-    background: rgba(0, 255, 0, 0.15);
     border-right: 3px solid white;
     height: 100%;
 }
 .right{
-    background: rgba(255, 255, 255, 0.15);
     border-left: 3px solid white;
     height: 100%;
 }

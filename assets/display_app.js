@@ -31,8 +31,9 @@ var countdown_time = "09:00";
 var min = 4;
 var sec = 0;
 var tenth = 0;
+var h_color = [0, 255, 0];
+var v_color = [255, 255, 255];
 var clock_interval;
-var audio = new Audio('Christian Music/audio-1.mp3');
 var buzzer_audio = new Audio('buzzer.mp3');
 var long_buzzer_audio = new Audio('long_buzzer.mp3');
 var timeoutId;
@@ -69,33 +70,17 @@ bc.onmessage = (event) => {
       clock.innerHTML = event.data.split("&")[1];
   } else if (event.data.split("&")[0] == "period") {
       period.innerHTML = "Period: "+event.data.split("&")[1];
-  } else if (event.data.split("&")[0] == "home_poss") {
-    if (!sides) {
-      if (event.data.split("&")[1] == "true") {
-        left_possession.src="active_possession.png";
-      } else {
-        left_possession.src="inactive_possession.png";
-      }
+  } else if (event.data.split("&")[0] == "left_poss") {
+    if (event.data.split("&")[1] == "true") {
+      left_possession.src="active_possession.png";
     } else {
-      if (event.data.split("&")[1] == "true") {
-        right_possession.src="active_possession.png";
-      } else {
-        right_possession.src="inactive_possession.png";
-      }
+      left_possession.src="inactive_possession.png";
     }
-  } else if (event.data.split("&")[0] == "away_poss") {
-    if (!sides) {
-      if (event.data.split("&")[1] == "true") {
-        right_possession.src="active_possession.png";
-      } else {
-        right_possession.src="inactive_possession.png";
-      }
+  } else if (event.data.split("&")[0] == "right_poss") {
+    if (event.data.split("&")[1] == "true") {
+      right_possession.src="active_possession.png";
     } else {
-      if (event.data.split("&")[1] == "true") {
-        left_possession.src="active_possession.png";
-      } else {
-        left_possession.src="inactive_possession.png";
-      }
+      right_possession.src="inactive_possession.png";
     }
   } else if (event.data.split("&")[0] == "home_b") {
     if (!sides) {
@@ -147,23 +132,35 @@ bc.onmessage = (event) => {
     }
   } else if (event.data.split("&")[0] == "player_foul") {
       player_fouls.innerHTML = event.data.split("&")[1];
+  } else if (event.data.split("&")[0] == "h_r_color") {
+    h_color[0] = event.data.split("&")[1];
+  } else if (event.data.split("&")[0] == "h_g_color") {
+    h_color[1] = event.data.split("&")[1];
+  } else if (event.data.split("&")[0] == "h_b_color") {
+    h_color[2] = event.data.split("&")[1];
+  } else if (event.data.split("&")[0] == "v_r_color") {
+    v_color[0] = event.data.split("&")[1];
+  } else if (event.data.split("&")[0] == "v_g_color") {
+    v_color[1] = event.data.split("&")[1];
+  } else if (event.data.split("&")[0] == "v_b_color") {
+    v_color[2] = event.data.split("&")[1];
   } else if (event.data.split("&")[0] == "sides") {
       if (event.data.split("&")[1] == "true") {
         sides=true;
-        top_left.style.backgroundColor='rgba(255, 255, 255, 0.15)';
-        middle_left.style.backgroundColor='rgba(255, 255, 255, 0.15)';
-        bottom_left.style.backgroundColor='rgba(255, 255, 255, 0.15)';
-        top_right.style.backgroundColor='rgba(0, 255, 0, 0.15)';
-        middle_right.style.backgroundColor='rgba(0, 255, 0, 0.15)';
-        bottom_right.style.backgroundColor='rgba(0, 255, 0, 0.15)';
+        top_left.style.backgroundColor='rgba('+v_color[0]+','+v_color[1]+','+v_color[2]+', 0.15)';
+        middle_left.style.backgroundColor='rgba('+v_color[0]+','+v_color[1]+','+v_color[2]+', 0.15)';
+        bottom_left.style.backgroundColor='rgba('+v_color[0]+','+v_color[1]+','+v_color[2]+', 0.15)';
+        top_right.style.backgroundColor='rgba('+h_color[0]+','+h_color[1]+','+h_color[2]+', 0.15)';
+        middle_right.style.backgroundColor='rgba('+h_color[0]+','+h_color[1]+','+h_color[2]+', 0.15)';
+        bottom_right.style.backgroundColor='rgba('+h_color[0]+','+h_color[1]+','+h_color[2]+', 0.15)';
       } else {
         sides=false;
-        top_right.style.backgroundColor='rgba(255, 255, 255, 0.15)';
-        middle_right.style.backgroundColor='rgba(255, 255, 255, 0.15)';
-        bottom_right.style.backgroundColor='rgba(255, 255, 255, 0.15)';
-        top_left.style.backgroundColor='rgba(0, 255, 0, 0.15)';
-        middle_left.style.backgroundColor='rgba(0, 255, 0, 0.15)';
-        bottom_left.style.backgroundColor='rgba(0, 255, 0, 0.15)';
+        top_right.style.backgroundColor='rgba('+v_color[0]+','+v_color[1]+','+v_color[2]+', 0.15)';
+        middle_right.style.backgroundColor='rgba('+v_color[0]+','+v_color[1]+','+v_color[2]+', 0.15)';
+        bottom_right.style.backgroundColor='rgba('+v_color[0]+','+v_color[1]+','+v_color[2]+', 0.15)';
+        top_left.style.backgroundColor='rgba('+h_color[0]+','+h_color[1]+','+h_color[2]+', 0.15)';
+        middle_left.style.backgroundColor='rgba('+h_color[0]+','+h_color[1]+','+h_color[2]+', 0.15)';
+        bottom_left.style.backgroundColor='rgba('+h_color[0]+','+h_color[1]+','+h_color[2]+', 0.15)';
       }
   } else if (event.data.split("&")[0] == "home_name") {
     if (!sides) {

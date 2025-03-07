@@ -9,6 +9,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="assets/favicon.png">
 </head>
 <body>
 <div class="main">
@@ -30,28 +31,17 @@
         <div class="period_div">
             <div class="period" id="m_per"><button>-</button></div>
             <div><h3 id="num_per">Period: 1</h3></div>
+            <div><h3>/</h3></div>
+            <div><input id="total_per" style="width:50px" type="number" value="4"></div>
             <div class="period" id="p_per"><button>+</button></div>
         </div>
     </div>
     <div class="container">
-            <div class="visitor">
-            <input type="text" id="v_name" name="v_name" class="team_name" value="Away">
-            <h3 id="v_score">Score: 0</h3>
-            <button id="v_p3">+3</button><br>
-            <button id="v_p2">+2</button><br>
-            <button id="v_p1">+1</button><br>
-            <button id="v_m1">-1</button><br><br>
-            <p id="v_foul">Fouls: 0</p>
-            <button id="v_foul_p1">Foul: +1</button><br>
-            <button id="v_foul_m1">Foul: -1</button><br><br>
-            <p id="v_tol">TOL: 1</p>
-            <button id="v_tol_p1">TOL: +1</button><br>
-            <button id="v_tol_m1">TOL: -1</button>
-        </div>
+        <script src="assets/left_controller.js"></script>
         <div class="time">
-            <button class="possession" id="guest_possession"><</button> <button class="possession" id="home_possession">></button><br><br>
-            <p id="time_display">Time Edit: 4:00.0</p>
-            <input type="number" id="min" name="min" class="time_enter" value=4> : <input type="number" id="sec" name="sec" class="time_enter" value=0> . <input type="number" id="tenth" name="tenth" class="time_enter" value=0><br>
+            <button class="possession" id="left_possession"><</button> <button class="possession" id="right_possession">></button><br><br>
+            <p id="time_display">Time Edit: 8:00.0</p>
+            <input type="number" id="min" name="min" class="time_enter" value=8> : <input type="number" id="sec" name="sec" class="time_enter" value=0> . <input type="number" id="tenth" name="tenth" class="time_enter" value=0><br>
             <button id="update_time">Update Time</button><br>
             <button id="time_in">Time In</button><br><br>
             <button id="switch_sides"><-- Switch Sides --></button><br>
@@ -62,25 +52,11 @@
             <button id="countdown">Countdown</button><br>
             <p>Current Score Differential</p>
             <p id="differential">0</p>
-            <div><a href="assets/display.html" target="_blank"><button style="background: blue">Open Display</button></a></div>
+            <div><a href="assets/display.html" target="_blank"><button id="open_display" style="background: blue">Open Display</button></a></div>
             <div><button id="reset_fouls" class="footer">RESET FOULS</button></div>
             <div><button id="reset" class="footer">RESET GAME</button></div>
         </div>
-        <div class="home">
-            <input type="text" id="h_name" name="h_name" class="team_name" value="Home">
-            <h3 id="h_score">Score: 0</h3>
-            <button id="h_p3">+3</button><br>
-            <button id="h_p2" onclick="this.blur();">+2</button><br>
-            <button id="h_p1">+1</button><br>
-            <button id="h_m1">-1</button><br><br>
-            <p id="h_foul">Fouls: 0</p>
-            <button id="h_foul_p1">Foul: +1</button><br>
-            <button id="h_foul_m1">Foul: -1</button><br><br>
-            <p id="h_tol">TOL: 1</p>
-            <button id="h_tol_p1">TOL: +1</button><br>
-            <button id="h_tol_m1">TOL: -1</button>
-        </div>
-
+        <script src="assets/right_controller.js"></script>
     </div>
 </div>
 </body>

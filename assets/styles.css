@@ -23,15 +23,11 @@
     box-shadow: 0 0 20px rgba(255, 255, 255, 0.55); 
 }
 iframe {
-    width: 17dvw;
-    height: 9.562dvw;
+    width: 18dvw;
+    height: 10dvw;
 }
 html {
     background: #000;
-}
-
-.active_button {
-    background:rgb(0, 0, 0);
 }
 
 .main {
@@ -43,6 +39,14 @@ html {
 
 .audio {
     margin: 10px;
+}
+.color {
+    display:flex;
+}
+.music {
+    width: 30%;
+    max-width:300px;
+    margin-top: 10px;
 }
 
 .audio p {
@@ -87,10 +91,10 @@ html {
     max-width:300px;
     margin-top: 10px;
 }
-.home button, .home input {
+.home button:not(.active_button), .home input {
     background:rgba(0, 255, 0, 0.25);
 }
-.visitor button, .visitor input {
+.visitor button:not(.active_button), .visitor input {
     background:rgba(255, 255, 255, 0.25);
 }
 .time_enter {
@@ -112,4 +116,7 @@ html {
 }
 #differential {
     font-size: 2rem;
+}
+.active_button {
+    background:rgb(0, 0, 0);
 }

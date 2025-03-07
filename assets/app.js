@@ -1,7 +1,5 @@
-//User Defined Variables
-var num_music = 0; //Number of audio files (audio-1.mp3, ..., audio-"num_music")
-var anthem_path = "assets/anthem.mp3"; //Path to the national anthem recording
-var intro_path = "assets/intro.mp3"; //Path to Intro Recording
+//User Variables
+var num_music = 0;
 
 //Music and buzzer buttons
 var music = document.getElementById('music');
@@ -14,6 +12,7 @@ var timeout = document.getElementById('timeout');
 var m_per = document.getElementById('m_per');
 var p_per = document.getElementById('p_per');
 var num_per = document.getElementById('num_per');
+var total_per = document.getElementById('total_per');
 //Score
 var h_score = document.getElementById('h_score');
 var v_score = document.getElementById('v_score');
@@ -37,8 +36,8 @@ var v_foul_m1 = document.getElementById('v_foul_m1');
 var reset = document.getElementById('reset');
 var reset_fouls = document.getElementById('reset_fouls');
 //Possession
-var v_poss = document.getElementById('guest_possession');
-var h_poss = document.getElementById('home_possession');
+var r_poss = document.getElementById('right_possession');
+var l_poss = document.getElementById('left_possession');
 //Timeouts Left
 var v_tol_p1 = document.getElementById('v_tol_p1');
 var v_tol_m1 = document.getElementById('v_tol_m1');
@@ -53,8 +52,11 @@ var flag = document.getElementById('flag');
 var countdown_time = document.getElementById('countdown_time');
 var countdown = document.getElementById('countdown');
 var switch_sides = document.getElementById('switch_sides');
-var home_name = document.getElementById('h_name');
+var h_name = document.getElementById('h_name');
+var v_name = document.getElementById('v_name');
 var open_display = document.getElementById('display_open');
+var visitor = document.getElementById('visitor');
+var home = document.getElementById('home');
 //Time
 var time_display = document.getElementById('time_display');
 var min_enter = document.getElementById('min');
@@ -62,24 +64,37 @@ var sec_enter = document.getElementById('sec');
 var tenth_enter = document.getElementById('tenth');
 var update_time = document.getElementById('update_time');
 var time_in = document.getElementById('time_in');
+var open_display = document.getElementById('open_display');
 var now_time = new Date();
 var previous_time = new Date();
+//Colors
+var h_r_color = document.getElementById('h_r_color');
+var h_g_color = document.getElementById('h_g_color');
+var h_b_color = document.getElementById('h_b_color');
+var v_r_color = document.getElementById('v_r_color');
+var v_g_color = document.getElementById('v_g_color');
+var v_b_color = document.getElementById('v_b_color');
 //Initial Values
 var period = 1;
 var home_score = 0;
 var visitor_score = 0;
 var home_fouls = 0;
 var visitor_fouls = 0;
-var home_tol = 1;
-var visitor_tol = 1;
+var home_tol = 0;
+var visitor_tol = 0;
 var home_poss = 0;
 var visitor_poss = 0;
-var min = 4;
+var num_periods = 4;
+var min = 8;
 var sec = 0;
 var tenth = 0;
+var h_color = [0, 255, 0];
+var v_color = [255, 255, 255];
 var player_foul = null;
 var clock_interval;
 var audio = new Audio('assets/Music/audio-1.mp3');
+var intro = new Audio ('assets/intros.mp3');
+var anthem_music = new Audio ('assets/anthem.mp3');
 var buzzer_audio = new Audio('assets/buzzer.mp3');
 var long_buzzer_audio = new Audio('assets/long_buzzer.mp3');
 var timeoutId;
@@ -95,7 +110,7 @@ bc.onmessage = (event) => {
         catch (e) {
             console.log(e);
         }
-        long_buzzer_audio.load();
+        long_buzzer_audio.currentTime = 0;
         long_buzzer_audio.play();
         cover.classList.add("active_button");
         bc.postMessage("Cover");
@@ -103,87 +118,332 @@ bc.onmessage = (event) => {
             countdown.classList.remove("active_button");
             bc.postMessage("countdown_off");
         }, 4000);
+        clearInterval(clear_audio_interval);
         clear_audio_interval = setInterval (function() {
-            if (audio.volume - 0.1 > 0){
-                audio.volume -= 0.1
+            if (audio.volume - 0.1 > 0) {
+                audio.volume -= 0.1;
+                intro.volume -= 0.1;
+                anthem_music.volume -= 0.1;
             } else {
-                audio.load();
                 audio.pause();
+                intro.pause();
+                anthem_music.pause();
                 audio.volume = 1;
+                intro.volume = 1;
+                anthem_music.volume = 1;
                 clearInterval(clear_audio_interval);
+                flag.classList.remove("active_button");
+                bc.postMessage("flag_off");
             }
         }, 200);
     }
 };
 window.addEventListener("load", (event) => {
     load_data();
-  });
+});
+let keysPressed = {};
 document.addEventListener('keydown', (event) => {
+    keysPressed[event.key] = true;
     if (event.key == ' ') {
         document.activeElement.blur();
         if (min != 0 || sec != 0 || tenth != 0) {
             time_in_time_out();
         }
-    }
-    if (event.key == 'Enter') {
+    } else if (event.key == 'Enter') {
         if (document.activeElement == countdown_time) {
             countdown.classList.add("active_button");
             bc.postMessage("countdown_on");
             bc.postMessage("countdown_time&"+countdown_time.value);
         }
+        if (document.activeElement == min_enter || document.activeElement == sec_enter || document.activeElement == tenth_enter) {
+            min = min_enter.value;
+            sec = sec_enter.value;
+            tenth = tenth_enter.value;
+            update_data();
+        }
         document.activeElement.blur();
         update_data();
     }
+
+    if (document.activeElement != h_name && document.activeElement != v_name) {
+        if (event.key == 'Shift' && event.location == '2') {
+            if (r_poss.classList.contains("active_button")) {
+                r_poss.classList.remove("active_button");
+            } else {
+                r_poss.classList.add("active_button");
+                l_poss.classList.remove("active_button");
+            }
+            document.activeElement.blur();
+            update_data();
+        } else if (event.key == 'Shift' && event.location == '1') {
+            if (l_poss.classList.contains("active_button")) {
+                l_poss.classList.remove("active_button");
+            } else {
+                l_poss.classList.add("active_button");
+                r_poss.classList.remove("active_button");
+            }
+            document.activeElement.blur();
+            update_data();
+        } else if (event.key == 'ArrowUp') {
+            period++; //Go to next period
+            update_data(); //Update the content on the screen and in the file
+            if ((num_periods / 2 + 1) == period) {
+                if (confirm("HALFTIME: Do you need to reset fouls?")) {
+                    home_fouls = 0;
+                    visitor_fouls = 0;
+                    update_data();
+                };
+            }
+            document.activeElement.blur();
+        } else if (event.key == 'ArrowDown') {
+            if(period != 1) {
+                period--; //Go to previous period
+            }
+            document.activeElement.blur();
+            update_data(); //Update the content on the screen and in the file
+        }
+        else if (keysPressed['ArrowRight'] && event.key == '3') {
+            visitor_score += 3;
+            v_p3.classList.add("active_button");
+            update_data();
+            document.activeElement.blur();
+        }
+        else if (keysPressed['ArrowRight'] && event.key == '2') {
+            visitor_score += 2;
+            v_p2.classList.add("active_button");
+            update_data();
+            document.activeElement.blur();
+        }
+        else if (keysPressed['ArrowRight'] && event.key == '1') {
+            visitor_score += 1;
+            v_p1.classList.add("active_button");
+            update_data();
+            document.activeElement.blur();
+        }
+        else if (keysPressed['ArrowLeft'] && event.key == '3') {
+            home_score += 3;
+            h_p3.classList.add("active_button");
+            update_data();
+            document.activeElement.blur();
+        }
+        else if (keysPressed['ArrowLeft'] && event.key == '2') {
+            home_score += 2;
+            h_p2.classList.add("active_button");
+            update_data();
+            document.activeElement.blur();
+        }
+        else if (keysPressed['ArrowLeft'] && event.key == '1') {
+            home_score += 1;
+            h_p1.classList.add("active_button");
+            update_data();
+            document.activeElement.blur();
+        }
+        else if (event.key == 't') {
+            if (timeout.classList.contains("active_button")) {
+                timeout.classList.remove("active_button");
+                clearTimeout(timeoutId);
+            } else {
+                timeout.classList.add("active_button");
+                timeoutId = setTimeout(short_buzzer, 30000);
+            }
+            function short_buzzer() {
+                try {
+                    buzzer_audio.pause();
+                }
+                catch (e) {
+                    console.log(e);
+                }
+                buzzer_audio.currentTime = 0;
+                buzzer_audio.play();
+                timeout.classList.remove("active_button");
+            }
+        }
+    }
 });
+h_name.addEventListener("input", (event) => {
+    update_data();
+});
+v_name.addEventListener("input", (event) => {
+    update_data();
+});
+h_r_color.addEventListener("input", (event) => {
+    localStorage.setItem("h_r_color", h_r_color.value);
+    h_color[0] = parseInt(h_r_color.value, 10);
+    bc.postMessage("h_r_color&"+h_color[0]);
+    update_data();
+
+});
+h_g_color.addEventListener("input", (event) => {
+    localStorage.setItem("h_g_color", h_g_color.value);
+    h_color[1] = parseInt(h_g_color.value, 10);
+    bc.postMessage("h_g_color&"+h_color[1]);
+    update_data();
+});
+h_b_color.addEventListener("input", (event) => {
+    localStorage.setItem("h_b_color", h_b_color.value);
+    h_color[2] = parseInt(h_b_color.value, 10);
+    bc.postMessage("h_b_color&"+h_color[2]);
+    update_data();
+});
+v_r_color.addEventListener("input", (event) => {
+    localStorage.setItem("v_r_color", v_r_color.value);
+    v_color[0] = parseInt(v_r_color.value, 10);
+    bc.postMessage("v_r_color&"+v_color[0]);
+    update_data();
+});
+v_g_color.addEventListener("input", (event) => {
+    localStorage.setItem("v_g_color", v_g_color.value);
+    v_color[1] = parseInt(v_g_color.value, 10);
+    bc.postMessage("v_g_color&"+v_color[1]);
+    update_data();
+});
+v_b_color.addEventListener("input", (event) => {
+    localStorage.setItem("v_b_color", v_b_color.value);
+    v_color[2] = parseInt(v_b_color.value, 10);
+    bc.postMessage("v_b_color&"+v_color[2]);
+    update_data();
+});
+total_per.addEventListener("input", (event) => {
+    if(parseInt(total_per.value, 10) <= 0) {
+        total_per.value = 0;
+    }
+    localStorage.setItem("total_per", total_per.value);
+    num_periods = parseInt(total_per.value, 10)
+});
+countdown_time.addEventListener("input", (event) => {
+    localStorage.setItem("countdown_time", countdown_time.value);
+});
+min_enter.addEventListener(`focus`, () => min_enter.select());
+sec_enter.addEventListener(`focus`, () => sec_enter.select());
+tenth_enter.addEventListener(`focus`, () => tenth_enter.select());
+h_name.addEventListener(`focus`, () => h_name.select());
+v_name.addEventListener(`focus`, () => v_name.select());
+min_enter.addEventListener("input", (event) => {
+    if (min_enter.value <= -1) {
+        min_enter.value = "0";
+        sec_enter.value = "00";
+        tenth_enter.value = "0";
+    }
+    localStorage.setItem("min_enter", min_enter.value);
+    localStorage.setItem("sec_enter", sec_enter.value);
+    localStorage.setItem("tenth_enter", tenth_enter.value);
+});
+sec_enter.addEventListener("input", (event) => {
+    sec_enter.value = parseFloat(sec_enter.value);
+    if (sec_enter.value == 60) {
+        min_enter.value = (parseInt(min_enter.value) + 1);
+        sec_enter.value = "00"
+    }
+    if (sec_enter.value > 60) {
+        sec_enter.value = "59";
+    }
+    if (sec_enter.value == -1) {
+        if (min_enter.value != 0) {
+            min_enter.value = (parseInt(min_enter.value) - 1);
+            sec_enter.value = "59";
+        }
+        else {
+            tenth_enter.value = 0;
+            sec_enter.value = "00";
+        }
+    }
+    if (sec_enter.value < -1) {
+        sec_enter.value = "00";
+    }
+    localStorage.setItem("min_enter", min_enter.value);
+    localStorage.setItem("sec_enter", sec_enter.value);
+    localStorage.setItem("tenth_enter", tenth_enter.value);
+});
+tenth_enter.addEventListener("input", (event) => {
+    if (tenth_enter.value == 10) {
+        if (sec_enter.value == 59) {
+            min_enter.value = (parseInt(min_enter.value) + 1);
+            sec_enter.value = "00";
+        } else {
+            sec_enter.value = (parseInt(sec_enter.value) + 1);
+        }
+        tenth_enter.value = 0;
+    }
+    if (tenth_enter.value == -1) {
+        if (sec_enter.value == 0 && min_enter.value == 0) {
+            tenth_enter.value = 0;
+        }
+        else if (sec_enter.value == 0) {
+            if (min_enter.value != 0) {
+                min_enter.value = (parseInt(min_enter.value) - 1);
+                sec_enter.value = "59";
+                tenth_enter.value = 9;
+            }
+        } else {
+            sec_enter.value = (parseInt(sec_enter.value) - 1);
+            tenth_enter.value = 9;
+        }
+    }
+    localStorage.setItem("min_enter", min_enter.value);
+    localStorage.setItem("sec_enter", sec_enter.value);
+    localStorage.setItem("tenth_enter", tenth_enter.value);
+});
+document.addEventListener('keyup', (event) => {
+    keysPressed[event.key] = false;
+    v_p3.classList.remove("active_button");
+    v_p2.classList.remove("active_button");
+    v_p1.classList.remove("active_button");
+    h_p3.classList.remove("active_button");
+    h_p2.classList.remove("active_button");
+    h_p1.classList.remove("active_button");
+ });
 music.addEventListener("click", function() {
-    console.log(audio.volume);
     play_music();
 });
 intros.addEventListener("click", function() {
     try {
-        audio.pause();
+        intro.pause();
     }
     catch (e) {
         console.log(e);
     }
-    audio.setAttribute('src', intro_path);
-    audio.load();
-    audio.play();
-    audio.onended = function() {
-        audio.load();
-        audio.pause(); 
+    intro.currentTime = 0;
+    intro.play();
+    intro.onended = function() {
+        intro.pause(); 
     };
 });
 anthem.addEventListener("click", function() {
     try {
-        audio.pause();
+        anthem_music.pause();
     }
     catch (e) {
         console.log(e);
     }
-    audio.setAttribute('src', anthem_path);
-    audio.load();
-    audio.play();
-    audio.onended = function() {
-        audio.load();
-        audio.pause(); 
+    anthem_music.currentTime = 0;
+    anthem_music.play();
+    anthem_music.onended = function() {
+        anthem_music.pause(); 
     };
     flag.classList.add("active_button");
     bc.postMessage("flag_on");
-    audio.onended = function() {
+    anthem_music.onended = function() {
         flag.classList.remove("active_button");
         bc.postMessage("flag_off");
     };
 });
 clear.addEventListener("click", function() {
+    clearInterval(clear_audio_interval);
     clear_audio_interval = setInterval (function() {
         if (audio.volume - 0.1 > 0){
-            audio.volume -= 0.1
+            audio.volume -= 0.1;
+            intro.volume -= 0.1;
+            anthem_music.volume -= 0.1;
         } else {
-            audio.load();
             audio.pause();
+            intro.pause();
+            anthem_music.pause();
             audio.volume = 1;
+            intro.volume = 1;
+            anthem_music.volume = 1;
             clearInterval(clear_audio_interval);
+            flag.classList.remove("active_button");
+            bc.postMessage("flag_off");
         }
     }, 200);
 });
@@ -194,7 +454,7 @@ buzzer.addEventListener("click", function() {
     catch (e) {
         console.log(e);
     }
-    buzzer_audio.load();
+    buzzer_audio.currentTime = 0;
     buzzer_audio.play();
 });
 timeout.addEventListener("click", function() {
@@ -212,7 +472,7 @@ timeout.addEventListener("click", function() {
         catch (e) {
             console.log(e);
         }
-        buzzer_audio.load();
+        buzzer_audio.currentTime = 0;
         buzzer_audio.play();
         timeout.classList.remove("active_button");
     }
@@ -226,8 +486,12 @@ m_per.addEventListener("click", function() {
 p_per.addEventListener("click", function() {
     period++; //Go to next period
     update_data(); //Update the content on the screen and in the file
-    if (period == 3 || period == 4) {
-        alert("Do you need to reset fouls?");
+    if ((num_periods / 2 + 1) == period) {
+        if (confirm("HALFTIME: Do you need to reset fouls?")) {
+            home_fouls = 0;
+            visitor_fouls = 0;
+            update_data();
+        }
     }
 });
 h_p3.addEventListener("click", function() {
@@ -265,32 +529,26 @@ v_m1.addEventListener("click", function() {
 h_foul_p1.addEventListener("click", function() {
     player_foul = window.prompt("Player#-#Fouls","00-0");
     if (player_foul != null && player_foul != "") {
-        home_fouls++;
-        update_data();
         setTimeout(clear_player_foul, 30000);
     }
-    function clear_player_foul() {
-        player_foul = null;
-        update_data();
-    }
+    home_fouls++;
+    update_data();
 });
 h_foul_m1.addEventListener("click", function() {
+    clear_player_foul();
     home_fouls--;
     update_data();
 });
 v_foul_p1.addEventListener("click", function() {
     player_foul = window.prompt("Player#-#Fouls","00-0");
     if (player_foul != null && player_foul != "") {
-        visitor_fouls++;
-        update_data();
         setTimeout(clear_player_foul, 30000);
     }
-    function clear_player_foul() {
-        player_foul = null;
-        update_data();
-    }
+    visitor_fouls++;
+    update_data();
 });
 v_foul_m1.addEventListener("click", function() {
+    clear_player_foul();
     visitor_fouls--;
     update_data();
 });
@@ -311,6 +569,14 @@ v_tol_m1.addEventListener("click", function() {
     update_data();
 });
 update_time.addEventListener("click", function() {
+    if (min == 0 && sec == 0 && tenth == 0) {
+        if (confirm("Should we increment the period?\nOK=Increment Period and Reset Time; Cancel=Reset Time only")) {
+            period++; //Go to next period
+            if ((num_periods / 2 + 1) == period) {
+                alert("HALFTIME: Do you need to reset fouls?");
+            }
+        }
+    }
     min = min_enter.value;
     sec = sec_enter.value;
     tenth = tenth_enter.value;
@@ -322,10 +588,16 @@ reset.addEventListener("click", function() {
     visitor_score = 0;
     home_fouls = 0;
     visitor_fouls = 0;
-    home_tol = 1;
-    visitor_tol = 1;
-    v_poss.classList.remove("active_button");
-    h_poss.classList.remove("active_button");
+    home_tol = 0;
+    visitor_tol = 0;
+    h_name.value = "Home";
+    v_name.value = "Away";
+    r_poss.classList.remove("active_button");
+    l_poss.classList.remove("active_button");
+    min = min_enter.value;
+    sec = sec_enter.value;
+    tenth = tenth_enter.value;
+    alert("Don't forget to update time and timeouts left")
     update_data();
 });
 reset_fouls.addEventListener("click", function() {
@@ -337,78 +609,101 @@ cover.addEventListener("click", function() {
     if (cover.classList.contains("active_button")) {
         cover.classList.remove("active_button");
         bc.postMessage("Uncover");
+        update_data();
+        localStorage.setItem("cover", "false");
     } else {
         cover.classList.add("active_button");
         bc.postMessage("Cover");
+        localStorage.setItem("cover", "true");
     }
 });
 flag.addEventListener("click", function() {
     if (flag.classList.contains("active_button")) {
         flag.classList.remove("active_button");
         bc.postMessage("flag_off");
+        localStorage.setItem("flag", "false");
     } else {
         flag.classList.add("active_button");
         bc.postMessage("flag_on");
+        localStorage.setItem("flag", "true");
     }
 });
 countdown.addEventListener("click", function() {
     if (countdown.classList.contains("active_button")) {
         countdown.classList.remove("active_button");
         bc.postMessage("countdown_off");
+        localStorage.setItem("countdown", "false");
     } else {
         countdown.classList.add("active_button");
         bc.postMessage("countdown_on");
         bc.postMessage("countdown_time&"+countdown_time.value);
+        localStorage.setItem("countdown", "true");
     }
 });
 freeze.addEventListener("click", function() {
     if (freeze.classList.contains("active_button")) {
         freeze.classList.remove("active_button");
         update_data();
+        localStorage.setItem("freeze", "false");
     } else {
         freeze.classList.add("active_button");
+        localStorage.setItem("freeze", "true");
     }
 });
 switch_sides.addEventListener("click", function() {
     if (switch_sides.classList.contains("active_button")) {
         switch_sides.classList.remove("active_button");
+        localStorage.setItem("sides", "false");
     } else {
         switch_sides.classList.add("active_button");
+        localStorage.setItem("sides", "true");
+    }
+    if (r_poss.classList.contains("active_button")) {
+        r_poss.classList.remove("active_button");
+        l_poss.classList.add("active_button");
+    } else if (l_poss.classList.contains("active_button")) {
+        r_poss.classList.add("active_button");
+        l_poss.classList.remove("active_button");
     }
     update_data();
-    update_data();
+    window.location.reload();
 });
 time_in.addEventListener("click", function() {
     if (sec != 0 || min != 0 || tenth != 0) {
         time_in_time_out();
     }
 });
-v_poss.addEventListener("click", function() {
-    if (v_poss.classList.contains("active_button")) {
-        v_poss.classList.remove("active_button");
+r_poss.addEventListener("click", function() {
+    if (r_poss.classList.contains("active_button")) {
+        r_poss.classList.remove("active_button");
     } else {
-        v_poss.classList.add("active_button");
-        h_poss.classList.remove("active_button");
+        r_poss.classList.add("active_button");
+        l_poss.classList.remove("active_button");
     }
     update_data();
 });
-h_poss.addEventListener("click", function() {
-    if (h_poss.classList.contains("active_button")) {
-        h_poss.classList.remove("active_button");
+l_poss.addEventListener("click", function() {
+    if (l_poss.classList.contains("active_button")) {
+        l_poss.classList.remove("active_button");
     } else {
-        h_poss.classList.add("active_button");
-        v_poss.classList.remove("active_button");
+        l_poss.classList.add("active_button");
+        r_poss.classList.remove("active_button");
     }
     update_data();
+});
+open_display.addEventListener("click", function() {
+    setTimeout(function(){
+        update_data();
+    }, 500);
 });
 function update_data() {
     h_score.innerHTML = "Score: "+home_score;
     v_score.innerHTML = "Score: "+visitor_score;
     h_foul.innerHTML = "Fouls: "+home_fouls;
     v_foul.innerHTML = "Fouls: "+visitor_fouls;
-    num_per.innerHTML = "Period: "+period;
     h_tol.innerHTML = "TOL: "+home_tol;
     v_tol.innerHTML = "TOL: "+visitor_tol;
+    num_per.innerHTML = "Period: "+period;
     differential.innerHTML = Math.abs(home_score - visitor_score);
     time_display.innerHTML = min+":"+parseInt(sec).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})+"."+tenth;
     localStorage.setItem("period", period);
@@ -421,23 +716,26 @@ function update_data() {
     localStorage.setItem("min", min);
     localStorage.setItem("sec", sec);
     localStorage.setItem("tenth", tenth);
-    if (v_poss.classList.contains("active_button")) {
+    if (r_poss.classList.contains("active_button")) {
         localStorage.setItem("possession", "visitor");
-    } else if (h_poss.classList.contains("active_button")) {
+    } else if (l_poss.classList.contains("active_button")) {
         localStorage.setItem("possession", "home");
     } else {
         localStorage.setItem("possession", null);
     }
     if (!(freeze.classList.contains("active_button"))) {
+        bc.postMessage("sides&"+(switch_sides.classList.contains("active_button")));
+        bc.postMessage("left_poss&"+(l_poss.classList.contains("active_button")));
+        bc.postMessage("right_poss&"+(r_poss.classList.contains("active_button")));
         if (min != 0) {
             bc.postMessage("Clock&"+min+":"+parseInt(sec).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false}));
         } else {
             bc.postMessage("Clock&"+sec+"."+tenth);
         }
         bc.postMessage("home_name&"+h_name.value);
+        localStorage.setItem("home_name", h_name.value);
         bc.postMessage("visitor_name&"+v_name.value);
-        bc.postMessage("home_poss&"+(h_poss.classList.contains("active_button")));
-        bc.postMessage("away_poss&"+(v_poss.classList.contains("active_button")));
+        localStorage.setItem("visitor_name", v_name.value);
         bc.postMessage("period&"+period);
         if (home_fouls >= 10) {
             bc.postMessage("away_b&B+");
@@ -464,7 +762,6 @@ function update_data() {
         } else {
             bc.postMessage("player_foul&-");
         }
-        bc.postMessage("sides&"+(switch_sides.classList.contains("active_button")));
     }
 }
 function load_data() {
@@ -510,14 +807,14 @@ function load_data() {
     else {
         home_tol = 0;
     }
-    if (localStorage.getItem("h_poss") != null){
-        home_poss = parseInt(localStorage.getItem("h_poss"));
+    if (localStorage.getItem("l_poss") != null){
+        home_poss = parseInt(localStorage.getItem("l_poss"));
     }
     else {
         home_poss = 0;
     }
     if (localStorage.getItem("h_tol") != null){
-        visitor_poss = parseInt(localStorage.getItem("v_poss"));
+        visitor_poss = parseInt(localStorage.getItem("r_poss"));
     }
     else {
         visitor_poss_tol = 0;
@@ -526,7 +823,7 @@ function load_data() {
         min = parseInt(localStorage.getItem("min"));
     }
     else {
-        min = 4;
+        min = 8;
     }
     if (localStorage.getItem("sec") != null){
         sec = parseInt(localStorage.getItem("sec"));
@@ -540,17 +837,147 @@ function load_data() {
     else {
         tenth = 0;
     }
-    if (localStorage.getItem("possession") == "home") {
-        h_poss.classList.add("active_button");
-        v_poss.classList.remove("active_button");
-    } else if (localStorage.getItem("possession") == "visitor") {
-        v_poss.classList.add("active_button");
-        h_poss.classList.remove("active_button");
-    } else {
-        v_poss.classList.remove("active_button");
-        h_poss.classList.remove("active_button");
+    if (localStorage.getItem("min_enter") != null){
+        min_enter.value = parseInt(localStorage.getItem("min_enter"));
     }
-    bc.postMessage("Uncover");
+    else {
+        min_enter = "4";
+    }
+    if (localStorage.getItem("sec_enter") != null){
+        sec_enter.value = parseInt(localStorage.getItem("sec_enter"));
+    }
+    else {
+        sec_enter = "00";
+    }
+    if (localStorage.getItem("tenth_enter") != null){
+        tenth_enter.value = parseInt(localStorage.getItem("tenth_enter"));
+    }
+    else {
+        tenth_enter = "0";
+    }
+    if (localStorage.getItem("total_per") != null){
+        total_per.value = parseInt(localStorage.getItem("total_per"));
+    }
+    else {
+        min_enter = "4";
+    }
+    if (localStorage.getItem("possession") == "home") {
+        l_poss.classList.add("active_button");
+        r_poss.classList.remove("active_button");
+    } else if (localStorage.getItem("possession") == "visitor") {
+        r_poss.classList.add("active_button");
+        l_poss.classList.remove("active_button");
+    } else {
+        r_poss.classList.remove("active_button");
+        l_poss.classList.remove("active_button");
+    }
+    if (localStorage.getItem("home_name") != null){
+        h_name.value = localStorage.getItem("home_name");
+        v_name.value = localStorage.getItem("visitor_name");
+    }
+    else {
+        h_name.value = "Home";
+        v_name.value = "Away";
+    }
+    if (localStorage.getItem("countdown_time") != null){
+        countdown_time.value = localStorage.getItem("countdown_time");
+    }
+    if (localStorage.getItem("cover") == "true") {
+        bc.postMessage("Cover");
+        cover.classList.add("active_button");
+    }
+    else {
+        bc.postMessage("Uncover");
+        cover.classList.remove("active_button");
+    }
+    if (localStorage.getItem("flag") == "true") {
+        bc.postMessage("flag_on");
+        flag.classList.add("active_button");
+    }
+    else {
+        bc.postMessage("flag_off");
+        flag.classList.remove("active_button");
+    }
+    if (localStorage.getItem("countdown") == "true") {
+        bc.postMessage("countdown_on");
+        countdown.classList.add("active_button");
+    }
+    else {
+        bc.postMessage("countdown_off");
+        countdown.classList.remove("active_button");
+    }
+    if (localStorage.getItem("freeze") == "true") {
+        freeze.classList.add("active_button");
+    }
+    else {
+        freeze.classList.remove("active_button");
+    }
+    if (localStorage.getItem("sides") == "true") {
+        switch_sides.classList.add("active_button");
+    }
+    else {
+        switch_sides.classList.remove("active_button");
+    }
+    if (localStorage.getItem("h_r_color") != null) {
+        h_color[0] = parseInt(localStorage.getItem("h_r_color"));
+        h_r_color.value = parseInt(localStorage.getItem("h_r_color"));
+        bc.postMessage("h_r_color&"+h_color[0]);
+    }
+    else {
+        h_color[0] = 0;
+        h_r_color.value = 0;
+        bc.postMessage("h_r_color&"+h_color[0]);
+    }
+    if (localStorage.getItem("h_g_color") != null) {
+        h_color[1] = parseInt(localStorage.getItem("h_g_color"));
+        h_g_color.value = parseInt(localStorage.getItem("h_g_color"));
+        bc.postMessage("h_g_color&"+h_color[1]);
+    }
+    else {
+        h_color[1] = 255;
+        h_g_color.value = 255;
+        bc.postMessage("h_g_color&"+h_color[1]);
+    }
+    if (localStorage.getItem("h_b_color") != null) {
+        h_color[2] = parseInt(localStorage.getItem("h_b_color"));
+        h_b_color.value = parseInt(localStorage.getItem("h_b_color"));
+        bc.postMessage("h_b_color&"+h_color[2]);
+    }
+    else {
+        h_color[2] = 0;
+        h_b_color.value = 0;
+        bc.postMessage("h_b_color&"+h_color[2]);
+    }
+    if (localStorage.getItem("v_r_color") != null) {
+        v_color[0] = parseInt(localStorage.getItem("v_r_color"));
+        v_r_color.value = parseInt(localStorage.getItem("v_r_color"));
+        bc.postMessage("v_r_color&"+v_color[0]);
+    }
+    else {
+        v_color[0] = 255;
+        v_r_color.value = 255;
+        bc.postMessage("v_r_color&"+v_color[0]);
+    }
+    if (localStorage.getItem("h_g_color") != null) {
+        v_color[1] = parseInt(localStorage.getItem("v_g_color"));
+        v_g_color.value = parseInt(localStorage.getItem("v_g_color"));
+        bc.postMessage("v_g_color&"+v_color[1]);
+    }
+    else {
+        v_color[1] = 255;
+        v_g_color.value = 255;
+        bc.postMessage("v_g_color&"+v_color[1]);
+    }
+    if (localStorage.getItem("h_b_color") != null) {
+        v_color[2] = parseInt(localStorage.getItem("v_b_color"));
+        v_b_color.value = parseInt(localStorage.getItem("v_b_color"));
+        bc.postMessage("v_b_color&"+v_color[2]);
+    }
+    else {
+        v_color[2] = 255;
+        v_b_color.value = 255;
+        bc.postMessage("v_b_color&"+v_color[2]);
+    }
     update_data();
 }
 function getCookie(cname) {
@@ -569,14 +996,14 @@ function getCookie(cname) {
     return "N/A";
 }
 function play_music(){
-    var r = Math.floor((Math.random() * (num_music-1))+ 1);
+    var r = Math.floor((Math.random() * (num_music - 1))+ 1);
     try {
         audio.pause();
     }
     catch (e) {
         console.log(e);
     }
-    audio.setAttribute('src', 'assets/Christian Music/audio-'+r+'.mp3');
+    audio.setAttribute('src', 'assets/Music/audio-'+r+'.mp3');
     audio.load();
     audio.play();
     audio.onended = function() {
@@ -596,7 +1023,7 @@ function updateTime() {
             catch (e) {
                 console.log(e);
             }
-            long_buzzer_audio.load();
+            long_buzzer_audio.currentTime = 0;
             long_buzzer_audio.play();
             clearInterval(clock_interval);
         } else {
@@ -623,4 +1050,8 @@ function time_in_time_out(){
         previous_time = Date.now()-100;
         clock_interval = setInterval(updateTime, 25);
     }
+}
+function clear_player_foul() {
+    player_foul = null;
+    update_data();
 }
