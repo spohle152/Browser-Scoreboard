@@ -1,5 +1,5 @@
 //User Variables
-var num_music = 0;
+var num_music = 99;
 
 //Music and buzzer buttons
 var music = document.getElementById('music');
@@ -140,6 +140,7 @@ bc.onmessage = (event) => {
 };
 window.addEventListener("load", (event) => {
     load_data();
+    change_colors();
 });
 let keysPressed = {};
 document.addEventListener('keydown', (event) => {
@@ -205,40 +206,108 @@ document.addEventListener('keydown', (event) => {
             update_data(); //Update the content on the screen and in the file
         }
         else if (keysPressed['ArrowRight'] && event.key == '3') {
-            visitor_score += 3;
-            v_p3.classList.add("active_button");
-            update_data();
-            document.activeElement.blur();
+            if (switch_sides.classList.contains("active_button")) {
+                home_score += 3;
+                h_p3.classList.add("active_button");
+                update_data();
+                document.activeElement.blur();
+            } else {
+                visitor_score += 3;
+                v_p3.classList.add("active_button");
+                update_data();
+                document.activeElement.blur();
+            }
         }
         else if (keysPressed['ArrowRight'] && event.key == '2') {
-            visitor_score += 2;
-            v_p2.classList.add("active_button");
-            update_data();
-            document.activeElement.blur();
+            if (switch_sides.classList.contains("active_button")) {
+                home_score += 2;
+                h_p2.classList.add("active_button");
+                update_data();
+                document.activeElement.blur();
+            } else {
+                visitor_score += 2;
+                v_p2.classList.add("active_button");
+                update_data();
+                document.activeElement.blur();
+            }
         }
         else if (keysPressed['ArrowRight'] && event.key == '1') {
-            visitor_score += 1;
-            v_p1.classList.add("active_button");
-            update_data();
-            document.activeElement.blur();
+            if (switch_sides.classList.contains("active_button")) {
+                home_score += 1;
+                h_p1.classList.add("active_button");
+                update_data();
+                document.activeElement.blur();
+            } else {
+                visitor_score += 1;
+                v_p1.classList.add("active_button");
+                update_data();
+                document.activeElement.blur();
+            }
+        }
+        else if (keysPressed['ArrowRight'] && event.key == '-') {
+            if (switch_sides.classList.contains("active_button")) {
+                home_score -= 1;
+                h_m1.classList.add("active_button");
+                update_data();
+                document.activeElement.blur();
+            } else {
+                visitor_score -= 1;
+                v_m1.classList.add("active_button");
+                update_data();
+                document.activeElement.blur();
+            }
         }
         else if (keysPressed['ArrowLeft'] && event.key == '3') {
-            home_score += 3;
-            h_p3.classList.add("active_button");
-            update_data();
-            document.activeElement.blur();
+            if (switch_sides.classList.contains("active_button")) {
+                visitor_score += 3;
+                v_p3.classList.add("active_button");
+                update_data();
+                document.activeElement.blur();
+            } else {
+                home_score += 3;
+                h_p3.classList.add("active_button");
+                update_data();
+                document.activeElement.blur();
+            }
         }
         else if (keysPressed['ArrowLeft'] && event.key == '2') {
-            home_score += 2;
-            h_p2.classList.add("active_button");
-            update_data();
-            document.activeElement.blur();
+            if (switch_sides.classList.contains("active_button")) {
+                visitor_score += 2;
+                v_p2.classList.add("active_button");
+                update_data();
+                document.activeElement.blur();
+            } else {
+                home_score += 2;
+                h_p2.classList.add("active_button");
+                update_data();
+                document.activeElement.blur();
+            }
         }
         else if (keysPressed['ArrowLeft'] && event.key == '1') {
-            home_score += 1;
-            h_p1.classList.add("active_button");
-            update_data();
-            document.activeElement.blur();
+            if (switch_sides.classList.contains("active_button")) {
+                visitor_score += 1;
+                v_p1.classList.add("active_button");
+                update_data();
+                document.activeElement.blur();
+            } else {
+                home_score += 1;
+                h_p1.classList.add("active_button");
+                update_data();
+                document.activeElement.blur();
+            }
+        }
+        else if (keysPressed['ArrowLeft'] && event.key == '-') {
+            if (switch_sides.classList.contains("active_button")) {
+                visitor_score -= 1;
+                v_m1.classList.add("active_button");
+                update_data();
+                document.activeElement.blur();
+            } else {
+                home_score -= 1;
+                h_m1.classList.add("active_button");
+                update_data();
+                document.activeElement.blur();
+            }
         }
         else if (event.key == 't') {
             if (timeout.classList.contains("active_button")) {
@@ -273,6 +342,7 @@ h_r_color.addEventListener("input", (event) => {
     h_color[0] = parseInt(h_r_color.value, 10);
     bc.postMessage("h_r_color&"+h_color[0]);
     update_data();
+    change_colors();
 
 });
 h_g_color.addEventListener("input", (event) => {
@@ -280,30 +350,35 @@ h_g_color.addEventListener("input", (event) => {
     h_color[1] = parseInt(h_g_color.value, 10);
     bc.postMessage("h_g_color&"+h_color[1]);
     update_data();
+    change_colors();
 });
 h_b_color.addEventListener("input", (event) => {
     localStorage.setItem("h_b_color", h_b_color.value);
     h_color[2] = parseInt(h_b_color.value, 10);
     bc.postMessage("h_b_color&"+h_color[2]);
     update_data();
+    change_colors();
 });
 v_r_color.addEventListener("input", (event) => {
     localStorage.setItem("v_r_color", v_r_color.value);
     v_color[0] = parseInt(v_r_color.value, 10);
     bc.postMessage("v_r_color&"+v_color[0]);
     update_data();
+    change_colors();
 });
 v_g_color.addEventListener("input", (event) => {
     localStorage.setItem("v_g_color", v_g_color.value);
     v_color[1] = parseInt(v_g_color.value, 10);
     bc.postMessage("v_g_color&"+v_color[1]);
     update_data();
+    change_colors();
 });
 v_b_color.addEventListener("input", (event) => {
     localStorage.setItem("v_b_color", v_b_color.value);
     v_color[2] = parseInt(v_b_color.value, 10);
     bc.postMessage("v_b_color&"+v_color[2]);
     update_data();
+    change_colors();
 });
 total_per.addEventListener("input", (event) => {
     if(parseInt(total_per.value, 10) <= 0) {
@@ -694,6 +769,7 @@ l_poss.addEventListener("click", function() {
 });
 open_display.addEventListener("click", function() {
     setTimeout(function(){
+        change_colors();
         update_data();
     }, 500);
 });
@@ -1057,4 +1133,36 @@ function time_in_time_out(){
 function clear_player_foul() {
     player_foul = null;
     update_data();
+}
+function change_colors() {
+    h_name.style.backgroundColor='rgba('+h_color[0]+','+h_color[1]+','+h_color[2]+', 0.15)';
+    h_r_color.style.backgroundColor='rgba('+h_color[0]+','+h_color[1]+','+h_color[2]+', 0.15)';
+    h_g_color.style.backgroundColor='rgba('+h_color[0]+','+h_color[1]+','+h_color[2]+', 0.15)';
+    h_b_color.style.backgroundColor='rgba('+h_color[0]+','+h_color[1]+','+h_color[2]+', 0.15)';
+    h_p3.style.backgroundColor='rgba('+h_color[0]+','+h_color[1]+','+h_color[2]+', 0.15)';
+    h_p2.style.backgroundColor='rgba('+h_color[0]+','+h_color[1]+','+h_color[2]+', 0.15)';
+    h_p1.style.backgroundColor='rgba('+h_color[0]+','+h_color[1]+','+h_color[2]+', 0.15)';
+    h_m1.style.backgroundColor='rgba('+h_color[0]+','+h_color[1]+','+h_color[2]+', 0.15)';
+    h_foul_p1.style.backgroundColor='rgba('+h_color[0]+','+h_color[1]+','+h_color[2]+', 0.15)';
+    h_foul_m1.style.backgroundColor='rgba('+h_color[0]+','+h_color[1]+','+h_color[2]+', 0.15)';
+    h_tol_p1.style.backgroundColor='rgba('+h_color[0]+','+h_color[1]+','+h_color[2]+', 0.15)';
+    h_tol_m1.style.backgroundColor='rgba('+h_color[0]+','+h_color[1]+','+h_color[2]+', 0.15)';
+    v_name.style.backgroundColor='rgba('+v_color[0]+','+v_color[1]+','+v_color[2]+', 0.15)';
+    v_r_color.style.backgroundColor='rgba('+v_color[0]+','+v_color[1]+','+v_color[2]+', 0.15)';
+    v_g_color.style.backgroundColor='rgba('+v_color[0]+','+v_color[1]+','+v_color[2]+', 0.15)';
+    v_b_color.style.backgroundColor='rgba('+v_color[0]+','+v_color[1]+','+v_color[2]+', 0.15)';
+    v_p3.style.backgroundColor='rgba('+v_color[0]+','+v_color[1]+','+v_color[2]+', 0.15)';
+    v_p2.style.backgroundColor='rgba('+v_color[0]+','+v_color[1]+','+v_color[2]+', 0.15)';
+    v_p1.style.backgroundColor='rgba('+v_color[0]+','+v_color[1]+','+v_color[2]+', 0.15)';
+    v_m1.style.backgroundColor='rgba('+v_color[0]+','+v_color[1]+','+v_color[2]+', 0.15)';
+    v_foul_p1.style.backgroundColor='rgba('+v_color[0]+','+v_color[1]+','+v_color[2]+', 0.15)';
+    v_foul_m1.style.backgroundColor='rgba('+v_color[0]+','+v_color[1]+','+v_color[2]+', 0.15)';
+    v_tol_p1.style.backgroundColor='rgba('+v_color[0]+','+v_color[1]+','+v_color[2]+', 0.15)';
+    v_tol_m1.style.backgroundColor='rgba('+v_color[0]+','+v_color[1]+','+v_color[2]+', 0.15)';
+    bc.postMessage("h_r_color&"+h_color[0]);
+    bc.postMessage("h_g_color&"+h_color[1]);
+    bc.postMessage("h_b_color&"+h_color[2]);
+    bc.postMessage("v_r_color&"+v_color[0]);
+    bc.postMessage("v_g_color&"+v_color[1]);
+    bc.postMessage("v_b_color&"+v_color[2]);
 }
