@@ -117,6 +117,7 @@ bc.onmessage = (event) => {
         setTimeout(function(){
             countdown.classList.remove("active_button");
             bc.postMessage("countdown_off");
+            localStorage.setItem("countdown", "false");
         }, 4000);
         clearInterval(clear_audio_interval);
         clear_audio_interval = setInterval (function() {
@@ -649,7 +650,11 @@ update_time.addEventListener("click", function() {
         if (confirm("Should we increment the period?\nOK=Increment Period and Reset Time; Cancel=Reset Time only")) {
             period++; //Go to next period
             if ((num_periods / 2 + 1) == period) {
-                alert("HALFTIME: Do you need to reset fouls?");
+                if (confirm("HALFTIME: Do you need to reset fouls?")) {
+                    home_fouls = 0;
+                    visitor_fouls = 0;
+                    update_data();
+                }
             }
         }
     }
