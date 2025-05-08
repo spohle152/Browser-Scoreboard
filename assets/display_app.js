@@ -24,8 +24,15 @@ var bottom_left = document.getElementById('bottom_left');
 var bottom_right = document.getElementById('bottom_right');
 var countdown_image = document.getElementById('countdown_image');
 var time_til_game = document.getElementById('time_til_game');
+var foul_labels = document.getElementsByClassName('foul_label');
+var tol_labels = document.getElementsByClassName('tol_label');
+var player_fouls_container = document.getElementById('player_fouls_container');
+var bottom = document.getElementsByClassName('bottom');
 const bc = new BroadcastChannel("channel");
 var sides = false;
+var show_score = true;
+var show_foul = true;
+var show_tol = true;
 var countdown_interval_id;
 var countdown_time = "09:00";
 var min = 4;
@@ -95,40 +102,92 @@ bc.onmessage = (event) => {
       left_bonus.innerHTML = event.data.split("&")[1];
     }
   } else if (event.data.split("&")[0] == "home_score") {
-    if (!sides) {
-      left_score.innerHTML = event.data.split("&")[1];
-    } else {
-      right_score.innerHTML = event.data.split("&")[1];
+    if (show_score) {
+      if (!sides) {
+        left_score.innerHTML = event.data.split("&")[1];
+      } else {
+        right_score.innerHTML = event.data.split("&")[1];
+      }
+    } 
+    else {
+      right_score.innerHTML = "";
+      left_score.innerHTML = "";
     }
   } else if (event.data.split("&")[0] == "away_score") {
-    if (!sides) {
-      right_score.innerHTML = event.data.split("&")[1];
-    } else {
-      left_score.innerHTML = event.data.split("&")[1];
+    if (show_score) {
+      if (!sides) {
+        right_score.innerHTML = event.data.split("&")[1];
+      } else {
+        left_score.innerHTML = event.data.split("&")[1];
+      }
+    } 
+    else {
+      right_score.innerHTML = "";
+      left_score.innerHTML = "";
     }
   } else if (event.data.split("&")[0] == "home_tol") {
-    if (!sides) {
-      left_tol.innerHTML = event.data.split("&")[1];
-    } else {
-      right_tol.innerHTML = event.data.split("&")[1];
+    if (show_tol) {
+      tol_labels[0].innerHTML = "TOL: ";
+      tol_labels[1].innerHTML = "TOL: ";
+      if (!sides) {
+        left_tol.innerHTML = event.data.split("&")[1];
+      } else {
+        right_tol.innerHTML = event.data.split("&")[1];
+      }
+    }
+    else {
+      tol_labels[0].innerHTML = "";
+      tol_labels[1].innerHTML = "";
+      left_tol.innerHTML = "";
+      right_tol.innerHTML = "";
     }
   } else if (event.data.split("&")[0] == "away_tol") {
-    if (!sides) {
-      right_tol.innerHTML = event.data.split("&")[1];
-    } else {
-      left_tol.innerHTML = event.data.split("&")[1];
+    if (show_tol) {
+      tol_labels[0].innerHTML = "TOL: ";
+      tol_labels[1].innerHTML = "TOL: ";
+      if (!sides) {
+        right_tol.innerHTML = event.data.split("&")[1];
+      } else {
+        left_tol.innerHTML = event.data.split("&")[1];
+      }
+    }
+    else {
+      tol_labels[0].innerHTML = "";
+      tol_labels[1].innerHTML = "";
+      left_tol.innerHTML = "";
+      right_tol.innerHTML = "";
     }
   } else if (event.data.split("&")[0] == "home_foul") {
-    if (!sides) {
-      left_fouls.innerHTML = event.data.split("&")[1];
-    } else {
-      right_fouls.innerHTML = event.data.split("&")[1];
+    if (show_foul) {
+      foul_labels[0].innerHTML = "Fouls: ";
+      foul_labels[1].innerHTML = "Fouls: ";
+      if (!sides) {
+        left_fouls.innerHTML = event.data.split("&")[1];
+      } else {
+        right_fouls.innerHTML = event.data.split("&")[1];
+      }
+    }
+    else {
+      foul_labels[0].innerHTML = "";
+      foul_labels[1].innerHTML = "";
+      left_fouls.innerHTML = "";
+      right_fouls.innerHTML = "";
     }
   } else if (event.data.split("&")[0] == "away_foul") {
-    if (!sides) {
-      right_fouls.innerHTML = event.data.split("&")[1];
-    } else {
-      left_fouls.innerHTML = event.data.split("&")[1];
+    if (show_foul) {
+      foul_labels[0].innerHTML = "Fouls: ";
+      foul_labels[1].innerHTML = "Fouls: ";
+      if (!sides) {
+        right_fouls.innerHTML = event.data.split("&")[1];
+      } else {
+        left_fouls.innerHTML = event.data.split("&")[1];
+      }
+    }
+    else {
+      foul_labels[0].innerHTML = "";
+      foul_labels[1].innerHTML = "";
+      left_fouls.innerHTML = "";
+      right_fouls.innerHTML = "";
     }
   } else if (event.data.split("&")[0] == "player_foul") {
       player_fouls.innerHTML = event.data.split("&")[1];
@@ -173,6 +232,28 @@ bc.onmessage = (event) => {
       right_name.innerHTML = event.data.split("&")[1];
     } else {
       left_name.innerHTML = event.data.split("&")[1];
+    }
+  } else if (event.data.split("&")[0] == "show_score") {
+    if (event.data.split("&")[1] == "false") {
+      show_score = false;
+    } else {
+      show_score = true;
+    }
+  } else if (event.data.split("&")[0] == "show_foul") {
+    if (event.data.split("&")[1] == "false") {
+      show_foul = false;
+      player_fouls_container.style.display = "none";
+      bottom[0].style.gridTemplateColumns = "1.5fr 1.5fr";
+    } else {
+      show_foul = true;
+      player_fouls_container.style.display = "block";
+      bottom[0].style.gridTemplateColumns = "1.5fr 1fr 1.5fr";
+    }
+  } else if (event.data.split("&")[0] == "show_tol") {
+    if (event.data.split("&")[1] == "false") {
+      show_tol = false;
+    } else {
+      show_tol = true;
     }
   }
 };

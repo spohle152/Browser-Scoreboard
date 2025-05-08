@@ -1,7 +1,8 @@
 var switch_sides = document.getElementById('switch_sides');
+var left = document.getElementById('left');
 
 if (localStorage.getItem("sides") == "true") {
-    document.write(
+    left.innerHTML = 
         '        <div class="visitor" id="visitor">\
                 <input type="text" id="v_name" name="v_name" class="team_name" value="Away">\
                 <div class="color"><h3>&nbsp;R:&nbsp;</h3><input id="v_r_color" type="number" min="0" max="255" value="255"><h3>&nbsp;G:&nbsp;</h3><input id="v_g_color" type="number" min="0" max="255" value="255"><h3>&nbsp;B:&nbsp;</h3><input id="v_b_color" type="number" min="0" max="255" value="255"></div>\
@@ -16,11 +17,10 @@ if (localStorage.getItem("sides") == "true") {
                 <p id="v_tol">TOL: 1</p>\
                 <button id="v_tol_p1">TOL: +1</button><br>\
                 <button id="v_tol_m1">TOL: -1</button>\
-            </div>'
-    );
+            </div>';
 }
 else {
-    document.write(
+    left.innerHTML = 
         '        <div class="home" id="home">\
                 <input type="text" id="h_name" name="h_name" class="team_name" value="Home">\
                 <div class="color"><h3>&nbsp;R:&nbsp;</h3><input id="h_r_color" type="number" min="0" max="255" value="0"><h3>&nbsp;G:&nbsp;</h3><input id="h_g_color" type="number" min="0" max="255" value="255"><h3>&nbsp;B:&nbsp;</h3><input id="h_b_color" type="number" min="0" max="255" value="0"></div>\
@@ -35,6 +35,5 @@ else {
                 <p id="h_tol">TOL: 1</p>\
                 <button id="h_tol_p1">TOL: +1</button><br>\
                 <button id="h_tol_m1">TOL: -1</button>\
-            </div>'
-    );
+            </div>';
 }

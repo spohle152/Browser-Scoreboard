@@ -1,5 +1,5 @@
 //User Variables
-var num_music = 99;
+var num_music = 0;
 
 //Music and buzzer buttons
 var music = document.getElementById('music');
@@ -74,6 +74,9 @@ var h_b_color = document.getElementById('h_b_color');
 var v_r_color = document.getElementById('v_r_color');
 var v_g_color = document.getElementById('v_g_color');
 var v_b_color = document.getElementById('v_b_color');
+//Visibility
+var show_score = document.getElementById('show_score');
+var show_foul = document.getElementById('show_foul');
 //Initial Values
 var period = 1;
 var home_score = 0;
@@ -317,17 +320,6 @@ document.addEventListener('keydown', (event) => {
             } else {
                 timeout.classList.add("active_button");
                 timeoutId = setTimeout(short_buzzer, 30000);
-            }
-            function short_buzzer() {
-                try {
-                    buzzer_audio.pause();
-                }
-                catch (e) {
-                    console.log(e);
-                }
-                buzzer_audio.currentTime = 0;
-                buzzer_audio.play();
-                timeout.classList.remove("active_button");
             }
         }
     }
@@ -731,6 +723,28 @@ freeze.addEventListener("click", function() {
         localStorage.setItem("freeze", "true");
     }
 });
+show_score.addEventListener("click", function() {
+    if (show_score.classList.contains("active_button")) {
+        show_score.classList.remove("active_button");
+        update_data();
+        localStorage.setItem("show_score", "false");
+    } else {
+        show_score.classList.add("active_button");
+        update_data();
+        localStorage.setItem("show_score", "true");
+    }
+});
+show_foul.addEventListener("click", function() {
+    if (show_foul.classList.contains("active_button")) {
+        show_foul.classList.remove("active_button");
+        update_data();
+        localStorage.setItem("show_foul", "false");
+    } else {
+        show_foul.classList.add("active_button");
+        update_data();
+        localStorage.setItem("show_foul", "true");
+    }
+});
 switch_sides.addEventListener("click", function() {
     if (switch_sides.classList.contains("active_button")) {
         switch_sides.classList.remove("active_button");
@@ -807,6 +821,9 @@ function update_data() {
     }
     if (!(freeze.classList.contains("active_button"))) {
         bc.postMessage("sides&"+(switch_sides.classList.contains("active_button")));
+        bc.postMessage("show_score&"+(show_score.classList.contains("active_button")));
+        bc.postMessage("show_foul&"+(show_foul.classList.contains("active_button")));
+        bc.postMessage("show_tol&"+(show_foul.classList.contains("active_button")));
         bc.postMessage("left_poss&"+(l_poss.classList.contains("active_button")));
         bc.postMessage("right_poss&"+(r_poss.classList.contains("active_button")));
         if (min != 0) {
@@ -996,6 +1013,18 @@ function load_data() {
     else {
         freeze.classList.remove("active_button");
     }
+    if (localStorage.getItem("show_score") == "false") {
+        show_score.classList.remove("active_button");
+    }
+    else {
+        show_score.classList.add("active_button");
+    }
+    if (localStorage.getItem("show_foul") == "false") {
+        show_foul.classList.remove("active_button");
+    }
+    else {
+        show_foul.classList.add("active_button");
+    }
     if (localStorage.getItem("sides") == "true") {
         switch_sides.classList.add("active_button");
     }
@@ -1110,6 +1139,8 @@ function updateTime() {
             long_buzzer_audio.currentTime = 0;
             long_buzzer_audio.play();
             clearInterval(clock_interval);
+            timeout.classList.add("active_button");
+            timeoutId = setTimeout(short_buzzer, 30000);
         } else {
             if (sec == 0 && min != 0 && tenth == 0) {
                 min-=1;
@@ -1124,6 +1155,17 @@ function updateTime() {
             update_data();
         }
     }
+}
+function short_buzzer() {
+    try {
+        buzzer_audio.pause();
+    }
+    catch (e) {
+        console.log(e);
+    }
+    buzzer_audio.currentTime = 0;
+    buzzer_audio.play();
+    timeout.classList.remove("active_button");
 }
 function time_in_time_out(){
     if (time_in.classList.contains("active_button")) {
