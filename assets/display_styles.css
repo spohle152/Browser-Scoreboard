@@ -70,6 +70,7 @@ html {
     border-right: 3px solid white;
     background: rgba(255, 125, 0, 0.25);
     height:100%;
+    transition: all 0.35s ease;
 }
 .top_side {
     display:block;
@@ -186,16 +187,65 @@ html {
 #right_score {
     text-align: right;
     padding-right: 3dvw;
+    transition: all 0.35s ease;
 }
 #left_score {
     text-align: left;
     padding-left: 3dvw;
+    transition: all 0.35s ease;
 }
 .other_stats {
     display:flex;
     margin-top: 8dvh;
 }
+#right_team_fouls {
+    transition: all 0.35s ease;
+}
+#left_team_fouls {
+    transition: all 0.35s ease;
+}
+#right_tol {
+    transition: all 0.35s ease;
+}
+#left_tol {
+    transition: all 0.35s ease;
+}
+.tol_label {
+    transition: all 0.35s ease;
+}
+.foul_label {
+    transition: all 0.35s ease;
+}
 .period_team_names {
     display: grid;
     grid-template-columns: 1fr 2fr 1fr;
+}
+
+.team_intros {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    background: linear-gradient(rgba(0, 0, 0, 0.75) 50%, rgba(0, 0, 0, 0.75)), url("background.jpg");
+    background-size: cover;
+    height: 100dvh;
+    width: 100dvw;
+    z-index: 3;
+    transition: all 1s ease;
+}
+#first_name {
+    text-align: center;
+    font-size: 35dvh;
+    margin-top: 5dvh;
+    transition: all 0.35s;
+}
+#last_name {
+    text-align: center;
+    font-size: 25dvh;
+    transition: all 0.35s;
+}
+#team_name {
+    text-align: center;
+    font-size: 20dvh;
+    transition: all 0.35s;
 }

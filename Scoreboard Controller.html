@@ -37,26 +37,30 @@
             <div class="period" id="p_per"><button>+</button></div>
         </div>
         <div>
-            <div><button id="show_foul">Show Fouls & TOL</button></div>
+            <div style="display:flex;">
+                <button id="show_foul" style="width:25%; margin: 5px;">Show Fouls</button>
+                <button id="show_tol" style="width:25%; margin: 5px;">Show TOL</button>
+            </div>
         </div>
     </div>
     <div class="container">
         <div id="left"></div>
         <div class="time">
-            <button class="possession" id="left_possession"><</button> <button class="possession" id="right_possession">></button><br><br>
+            <button class="possession" id="left_possession"><</button> <button class="possession" id="right_possession">></button><br>
             <p id="time_display">Time Edit: 8:00.0</p>
             <input type="number" id="min" name="min" class="time_enter" value=8> : <input type="number" id="sec" name="sec" class="time_enter" value=0> . <input type="number" id="tenth" name="tenth" class="time_enter" value=0><br>
             <button id="update_time">Update Time</button><br>
-            <button id="time_in">Time In</button><br><br>
+            <button id="time_in">Time In</button><br>
             <button id="switch_sides"><-- Switch Sides --></button><br>
             <button id="freeze">Freeze</button><br>
             <button id="cover">Cover</button><br>
-            <button id="flag">Flag</button><br><br>
+            <button id="flag">Flag</button><br>
             <input type="time" id="countdown_time" class="countdown_time" value="09:00"><br>
             <button id="countdown">Countdown</button><br>
             <p>Current Score Differential</p>
             <p id="differential">0</p>
             <div><a href="assets/display.html" target="_blank"><button id="open_display" style="background: blue">Open Display</button></a></div>
+            <div><a href="assets/introductions.html" target="_blank"><button id="open_display" style="background: blue">Introductions</button></a></div>
             <div><button id="reset_fouls" class="footer">RESET FOULS</button></div>
             <div><button id="reset" class="footer">RESET GAME</button></div>
         </div>
@@ -64,6 +68,7 @@
     </div>
 </div>
 </body>
+<script type="text/javascript" src="assets/teams.json"></script>
 <script src="assets/left_controller.js"></script>
 <script src="assets/right_controller.js"></script>
 <script src="assets/app.js"></script>

@@ -24,6 +24,10 @@ var bottom_left = document.getElementById('bottom_left');
 var bottom_right = document.getElementById('bottom_right');
 var countdown_image = document.getElementById('countdown_image');
 var time_til_game = document.getElementById('time_til_game');
+var team_intros = document.getElementById('team_intros');
+var first_name = document.getElementById('first_name');
+var last_name = document.getElementById('last_name');
+var team_name = document.getElementById('team_name');
 var foul_labels = document.getElementsByClassName('foul_label');
 var tol_labels = document.getElementsByClassName('tol_label');
 var player_fouls_container = document.getElementById('player_fouls_container');
@@ -105,89 +109,101 @@ bc.onmessage = (event) => {
     if (show_score) {
       if (!sides) {
         left_score.innerHTML = event.data.split("&")[1];
+        left_score.style.opacity = 1;
       } else {
         right_score.innerHTML = event.data.split("&")[1];
+        right_score.style.opacity = 1;
       }
     } 
     else {
-      right_score.innerHTML = "";
-      left_score.innerHTML = "";
+      right_score.style.opacity = 0;
+      left_score.style.opacity = 0;
     }
   } else if (event.data.split("&")[0] == "away_score") {
     if (show_score) {
       if (!sides) {
         right_score.innerHTML = event.data.split("&")[1];
+        right_score.style.opacity = 1;
       } else {
         left_score.innerHTML = event.data.split("&")[1];
+        left_score.style.opacity = 1;
       }
     } 
     else {
-      right_score.innerHTML = "";
-      left_score.innerHTML = "";
+      right_score.style.opacity = 0;
+      left_score.style.opacity = 0;
     }
   } else if (event.data.split("&")[0] == "home_tol") {
     if (show_tol) {
-      tol_labels[0].innerHTML = "TOL: ";
-      tol_labels[1].innerHTML = "TOL: ";
+      tol_labels[0].style.opacity = 1;
+      tol_labels[1].style.opacity = 1;
       if (!sides) {
         left_tol.innerHTML = event.data.split("&")[1];
+        left_tol.style.opacity = 1;
       } else {
         right_tol.innerHTML = event.data.split("&")[1];
+        right_tol.style.opacity = 1;
       }
     }
     else {
-      tol_labels[0].innerHTML = "";
-      tol_labels[1].innerHTML = "";
-      left_tol.innerHTML = "";
-      right_tol.innerHTML = "";
+      tol_labels[0].style.opacity = 0;
+      tol_labels[1].style.opacity = 0;
+      left_tol.style.opacity = 0;
+      right_tol.style.opacity = 0;
     }
   } else if (event.data.split("&")[0] == "away_tol") {
     if (show_tol) {
-      tol_labels[0].innerHTML = "TOL: ";
-      tol_labels[1].innerHTML = "TOL: ";
+      tol_labels[0].style.opacity = 1;
+      tol_labels[1].style.opacity = 1;
       if (!sides) {
         right_tol.innerHTML = event.data.split("&")[1];
+        right_tol.style.opacity = 1;
       } else {
         left_tol.innerHTML = event.data.split("&")[1];
+        left_tol.style.opacity = 1;
       }
     }
     else {
-      tol_labels[0].innerHTML = "";
-      tol_labels[1].innerHTML = "";
-      left_tol.innerHTML = "";
-      right_tol.innerHTML = "";
+      tol_labels[0].style.opacity = 0;
+      tol_labels[1].style.opacity = 0;
+      left_tol.style.opacity = 0;
+      right_tol.style.opacity = 0;
     }
   } else if (event.data.split("&")[0] == "home_foul") {
     if (show_foul) {
-      foul_labels[0].innerHTML = "Fouls: ";
-      foul_labels[1].innerHTML = "Fouls: ";
+      foul_labels[0].style.opacity = 1;
+      foul_labels[1].style.opacity = 1;
       if (!sides) {
         left_fouls.innerHTML = event.data.split("&")[1];
+        left_fouls.style.opacity = 1;
       } else {
         right_fouls.innerHTML = event.data.split("&")[1];
+        right_fouls.style.opacity = 1;
       }
     }
     else {
-      foul_labels[0].innerHTML = "";
-      foul_labels[1].innerHTML = "";
-      left_fouls.innerHTML = "";
-      right_fouls.innerHTML = "";
+      foul_labels[0].style.opacity = 0;
+      foul_labels[1].style.opacity = 0;
+      left_fouls.style.opacity = 0;
+      right_fouls.style.opacity = 0;
     }
   } else if (event.data.split("&")[0] == "away_foul") {
     if (show_foul) {
-      foul_labels[0].innerHTML = "Fouls: ";
-      foul_labels[1].innerHTML = "Fouls: ";
+      foul_labels[0].style.opacity = 1;
+      foul_labels[1].style.opacity = 1;
       if (!sides) {
         right_fouls.innerHTML = event.data.split("&")[1];
+        right_fouls.style.opacity = 1;
       } else {
         left_fouls.innerHTML = event.data.split("&")[1];
+        left_fouls.style.opacity = 1;
       }
     }
     else {
-      foul_labels[0].innerHTML = "";
-      foul_labels[1].innerHTML = "";
-      left_fouls.innerHTML = "";
-      right_fouls.innerHTML = "";
+      foul_labels[0].style.opacity = 0;
+      foul_labels[1].style.opacity = 0;
+      left_fouls.style.opacity = 0;
+      right_fouls.style.opacity = 0;
     }
   } else if (event.data.split("&")[0] == "player_foul") {
       player_fouls.innerHTML = event.data.split("&")[1];
@@ -242,12 +258,18 @@ bc.onmessage = (event) => {
   } else if (event.data.split("&")[0] == "show_foul") {
     if (event.data.split("&")[1] == "false") {
       show_foul = false;
-      player_fouls_container.style.display = "none";
-      bottom[0].style.gridTemplateColumns = "1.5fr 1.5fr";
+      player_fouls_container.style.opacity = 0;
+      setTimeout(function() {
+        player_fouls_container.style.display = "none";
+        bottom[0].style.gridTemplateColumns = "1.5fr 1.5fr";
+      }, 350);
     } else {
       show_foul = true;
       player_fouls_container.style.display = "block";
       bottom[0].style.gridTemplateColumns = "1.5fr 1fr 1.5fr";
+      setTimeout(function() {
+        player_fouls_container.style.opacity = 1;
+      }, 350);
     }
   } else if (event.data.split("&")[0] == "show_tol") {
     if (event.data.split("&")[1] == "false") {
@@ -255,7 +277,24 @@ bc.onmessage = (event) => {
     } else {
       show_tol = true;
     }
-  }
+  } else if (event.data.split("&")[0] == "intro_on") {
+    first_name.style.opacity = 0;
+    last_name.style.opacity = 0;
+    if (event.data.split("&")[3] != team_name.innerHTML) {
+      team_name.style.opacity = 0;
+    }
+    setTimeout(function() {
+      first_name.innerHTML = event.data.split("&")[1];
+      last_name.innerHTML = event.data.split("&")[2];
+      team_name.innerHTML = event.data.split("&")[3];
+      first_name.style.opacity = 1;
+      last_name.style.opacity = 1;
+      team_name.style.opacity = 1;
+      team_intros.style.opacity = 1;
+    }, 350);
+  } else if (event.data.split("&")[0] == "intro_off") {
+    team_intros.style.opacity = 0;
+  } 
 };
 
 function update_countdown() {

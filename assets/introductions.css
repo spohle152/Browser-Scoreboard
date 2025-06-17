@@ -1,0 +1,28 @@
+.active_button {
+    background: black;
+    color: white;
+}
+html {
+    background: black;
+    color: white;
+    font-family: "Bebas Neue", serif;
+    font-weight: 400;
+}
+body {
+    margin: 60px;
+}
+button {
+    background: rgba(255,255,0,0.5);
+    font-family: "Bebas Neue", serif;
+    font-size: 1.25rem;
+    font-weight: 400;
+    margin: 25px;
+    padding: 10px;
+    border: 2px solid white;
+    color: white
+}
+
+iframe {
+    width: 18dvw;
+    height: 10dvw;
+}

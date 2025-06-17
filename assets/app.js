@@ -1,5 +1,6 @@
 //User Variables
 var num_music = 0;
+var num_intros = 0;
 
 //Music and buzzer buttons
 var music = document.getElementById('music');
@@ -29,9 +30,13 @@ var differential = document.getElementById('differential');
 var h_foul = document.getElementById('h_foul');
 var h_foul_p1 = document.getElementById('h_foul_p1');
 var h_foul_m1 = document.getElementById('h_foul_m1');
+var h_bonus = document.getElementById('h_bonus');
+var h_d_bonus = document.getElementById('h_d_bonus');
 var v_foul = document.getElementById('v_foul');
 var v_foul_p1 = document.getElementById('v_foul_p1');
 var v_foul_m1 = document.getElementById('v_foul_m1');
+var v_bonus = document.getElementById('v_bonus');
+var v_d_bonus = document.getElementById('v_d_bonus');
 //Resets
 var reset = document.getElementById('reset');
 var reset_fouls = document.getElementById('reset_fouls');
@@ -77,6 +82,7 @@ var v_b_color = document.getElementById('v_b_color');
 //Visibility
 var show_score = document.getElementById('show_score');
 var show_foul = document.getElementById('show_foul');
+var show_tol = document.getElementById('show_tol');
 //Initial Values
 var period = 1;
 var home_score = 0;
@@ -96,7 +102,7 @@ var v_color = [255, 255, 255];
 var player_foul = null;
 var clock_interval;
 var audio = new Audio('assets/Music/audio-1.mp3');
-var intro = new Audio ('assets/intros.mp3');
+var intro = new Audio ('assets/intros-0.mp3');
 var anthem_music = new Audio ('assets/anthem.mp3');
 var buzzer_audio = new Audio('assets/buzzer.mp3');
 var long_buzzer_audio = new Audio('assets/long_buzzer.mp3');
@@ -105,6 +111,24 @@ var clear_audio_interval;
 const bc = new BroadcastChannel("channel");
 var iframe = document.getElementById("preview");
 iframe.muted = true;
+var teamsFile = JSON.parse(teams);
+var teams = [];
+
+for (player = 0; player < teamsFile.length; player += 1) {
+    if (teams.find((element) => element == teamsFile[player].TeamName) == null) {
+        teams.push(teamsFile[player].TeamName);
+    }
+}
+
+for (team = 0; team < teams.length; team += 1) {
+    var h_team_option = document.createElement('option');
+    h_team_option.innerHTML = teams[team];
+    var v_team_option = document.createElement('option');
+    v_team_option.innerHTML = teams[team];
+    h_name.appendChild(h_team_option);
+    v_name.appendChild(v_team_option);
+}
+
 bc.onmessage = (event) => {
     if(event.data == "countdown_finished") {
         try {
@@ -196,7 +220,11 @@ document.addEventListener('keydown', (event) => {
             update_data(); //Update the content on the screen and in the file
             if ((num_periods / 2 + 1) == period) {
                 if (confirm("HALFTIME: Do you need to reset fouls?")) {
+                    h_bonus.classList.remove("active_button");
+                    h_d_bonus.classList.remove("active_button");
                     home_fouls = 0;
+                    v_bonus.classList.remove("active_button");
+                    v_d_bonus.classList.remove("active_button");
                     visitor_fouls = 0;
                     update_data();
                 };
@@ -383,8 +411,6 @@ total_per.addEventListener("input", (event) => {
 countdown_time.addEventListener("input", (event) => {
     localStorage.setItem("countdown_time", countdown_time.value);
 });
-h_name.addEventListener(`focus`, () => h_name.select());
-v_name.addEventListener(`focus`, () => v_name.select());
 min_enter.addEventListener("input", (event) => {
     if (parseInt(min_enter.value, 10) <= -1) {
         min_enter.value = "0";
@@ -463,16 +489,18 @@ music.addEventListener("click", function() {
     play_music();
 });
 intros.addEventListener("click", function() {
+    var r = Math.floor((Math.random() * num_intros)+ 1);
     try {
         intro.pause();
     }
     catch (e) {
         console.log(e);
     }
-    intro.currentTime = 0;
+    intro.setAttribute('src', 'assets/Intros/audio-'+r+'.mp3');
+    intro.load();
     intro.play();
     intro.onended = function() {
-        intro.pause(); 
+    intro.pause(); 
     };
 });
 anthem.addEventListener("click", function() {
@@ -557,7 +585,11 @@ p_per.addEventListener("click", function() {
     update_data(); //Update the content on the screen and in the file
     if ((num_periods / 2 + 1) == period) {
         if (confirm("HALFTIME: Do you need to reset fouls?")) {
+            h_bonus.classList.remove("active_button");
+            h_d_bonus.classList.remove("active_button");
             home_fouls = 0;
+            v_bonus.classList.remove("active_button");
+            v_d_bonus.classList.remove("active_button");
             visitor_fouls = 0;
             update_data();
         }
@@ -643,7 +675,11 @@ update_time.addEventListener("click", function() {
             period++; //Go to next period
             if ((num_periods / 2 + 1) == period) {
                 if (confirm("HALFTIME: Do you need to reset fouls?")) {
+                    h_bonus.classList.remove("active_button");
+                    h_d_bonus.classList.remove("active_button");
                     home_fouls = 0;
+                    v_bonus.classList.remove("active_button");
+                    v_d_bonus.classList.remove("active_button");
                     visitor_fouls = 0;
                     update_data();
                 }
@@ -659,7 +695,11 @@ reset.addEventListener("click", function() {
     period = 1;
     home_score = 0;
     visitor_score = 0;
+    h_bonus.classList.remove("active_button");
+    h_d_bonus.classList.remove("active_button");
     home_fouls = 0;
+    v_bonus.classList.remove("active_button");
+    v_d_bonus.classList.remove("active_button");
     visitor_fouls = 0;
     home_tol = 0;
     visitor_tol = 0;
@@ -674,7 +714,11 @@ reset.addEventListener("click", function() {
     update_data();
 });
 reset_fouls.addEventListener("click", function() {
+    h_bonus.classList.remove("active_button");
+    h_d_bonus.classList.remove("active_button");
     home_fouls = 0;
+    v_bonus.classList.remove("active_button");
+    v_d_bonus.classList.remove("active_button");
     visitor_fouls = 0;
     update_data();
 });
@@ -723,6 +767,62 @@ freeze.addEventListener("click", function() {
         localStorage.setItem("freeze", "true");
     }
 });
+h_bonus.addEventListener("click", function() {
+    if (h_bonus.classList.contains("active_button")) {
+        h_bonus.classList.remove("active_button");
+        localStorage.setItem("h_bonus", "false");
+    } else {
+        if (h_d_bonus.classList.contains("active_button")) {
+            h_d_bonus.classList.remove("active_button");
+            localStorage.setItem("h_d_bonus", "false");
+        }
+        h_bonus.classList.add("active_button");
+        localStorage.setItem("h_bonus", "true");
+    }
+    update_data();
+});
+h_d_bonus.addEventListener("click", function() {
+    if (h_d_bonus.classList.contains("active_button")) {
+        h_d_bonus.classList.remove("active_button");
+        localStorage.setItem("h_d_bonus", "false");
+    } else {
+        if (h_bonus.classList.contains("active_button")) {
+            h_bonus.classList.remove("active_button");
+            localStorage.setItem("h_bonus", "false");
+        }
+        h_d_bonus.classList.add("active_button");
+        localStorage.setItem("h_d_bonus", "true");
+    }
+    update_data();
+});
+v_bonus.addEventListener("click", function() {
+    if (v_bonus.classList.contains("active_button")) {
+        v_bonus.classList.remove("active_button");
+        localStorage.setItem("v_bonus", "false");
+    } else {
+        if (v_d_bonus.classList.contains("active_button")) {
+            v_d_bonus.classList.remove("active_button");
+            localStorage.setItem("v_d_bonus", "false");
+        }
+        v_bonus.classList.add("active_button");
+        localStorage.setItem("v_bonus", "true");
+    }
+    update_data();
+});
+v_d_bonus.addEventListener("click", function() {
+    if (v_d_bonus.classList.contains("active_button")) {
+        v_d_bonus.classList.remove("active_button");
+        localStorage.setItem("v_d_bonus", "false");
+    } else {
+        if (v_bonus.classList.contains("active_button")) {
+            v_bonus.classList.remove("active_button");
+            localStorage.setItem("v_bonus", "false");
+        }
+        v_d_bonus.classList.add("active_button");
+        localStorage.setItem("v_d_bonus", "true");
+    }
+    update_data();
+});
 show_score.addEventListener("click", function() {
     if (show_score.classList.contains("active_button")) {
         show_score.classList.remove("active_button");
@@ -743,6 +843,18 @@ show_foul.addEventListener("click", function() {
         show_foul.classList.add("active_button");
         update_data();
         localStorage.setItem("show_foul", "true");
+    }
+});
+
+show_tol.addEventListener("click", function() {
+    if (show_tol.classList.contains("active_button")) {
+        show_tol.classList.remove("active_button");
+        update_data();
+        localStorage.setItem("show_tol", "false");
+    } else {
+        show_tol.classList.add("active_button");
+        update_data();
+        localStorage.setItem("show_tol", "true");
     }
 });
 switch_sides.addEventListener("click", function() {
@@ -793,6 +905,7 @@ open_display.addEventListener("click", function() {
     }, 500);
 });
 function update_data() {
+    change_colors();
     h_score.innerHTML = "Score: "+home_score;
     v_score.innerHTML = "Score: "+visitor_score;
     h_foul.innerHTML = "Fouls: "+home_fouls;
@@ -820,10 +933,24 @@ function update_data() {
         localStorage.setItem("possession", null);
     }
     if (!(freeze.classList.contains("active_button"))) {
+        if (h_bonus.classList.contains("active_button")) {
+            bc.postMessage("home_b&B");
+        } else if (h_d_bonus.classList.contains("active_button")) {
+            bc.postMessage("home_b&B+");
+        } else {
+            bc.postMessage("home_b&");
+        }
+        if (v_bonus.classList.contains("active_button")) {
+            bc.postMessage("away_b&B");
+        } else if (v_d_bonus.classList.contains("active_button")) {
+            bc.postMessage("away_b&B+");
+        } else {
+            bc.postMessage("away_b&");
+        }
         bc.postMessage("sides&"+(switch_sides.classList.contains("active_button")));
         bc.postMessage("show_score&"+(show_score.classList.contains("active_button")));
         bc.postMessage("show_foul&"+(show_foul.classList.contains("active_button")));
-        bc.postMessage("show_tol&"+(show_foul.classList.contains("active_button")));
+        bc.postMessage("show_tol&"+(show_tol.classList.contains("active_button")));
         bc.postMessage("left_poss&"+(l_poss.classList.contains("active_button")));
         bc.postMessage("right_poss&"+(r_poss.classList.contains("active_button")));
         if (min != 0) {
@@ -836,20 +963,20 @@ function update_data() {
         bc.postMessage("visitor_name&"+v_name.value);
         localStorage.setItem("visitor_name", v_name.value);
         bc.postMessage("period&"+period);
-        if (home_fouls >= 10) {
-            bc.postMessage("away_b&B+");
-        } else if (home_fouls >= 7) {
-            bc.postMessage("away_b&B");
-        } else {
-            bc.postMessage("away_b& ")
-        }
-        if (visitor_fouls >= 10) {
-            bc.postMessage("home_b&B+")
-        } else if (visitor_fouls >= 7) {
-            bc.postMessage("home_b&B");
-        } else {
-            bc.postMessage("home_b& ");
-        }
+        // if (home_fouls >= 10) {
+        //     bc.postMessage("away_b&B+");
+        // } else if (home_fouls >= 7) {
+        //     bc.postMessage("away_b&B");
+        // } else {
+        //     bc.postMessage("away_b& ")
+        // }
+        // if (visitor_fouls >= 10) {
+        //     bc.postMessage("home_b&B+")
+        // } else if (visitor_fouls >= 7) {
+        //     bc.postMessage("home_b&B");
+        // } else {
+        //     bc.postMessage("home_b& ");
+        // }
         bc.postMessage("home_score&"+home_score);
         bc.postMessage("away_score&"+visitor_score);
         bc.postMessage("home_tol&"+home_tol);
@@ -887,6 +1014,30 @@ function load_data() {
     }
     else {
         home_fouls = 0;
+    }
+    if (localStorage.getItem("h_bonus") == "true"){
+        h_bonus.classList.add("active_button");
+    }
+    else {
+        h_bonus.classList.remove("active_button");
+    }
+    if (localStorage.getItem("h_d_bonus") == "true"){
+        h_d_bonus.classList.add("active_button");
+    }
+    else {
+        h_d_bonus.classList.remove("active_button");
+    }
+    if (localStorage.getItem("v_bonus") == "true"){
+        v_bonus.classList.add("active_button");
+    }
+    else {
+        v_bonus.classList.remove("active_button");
+    }
+    if (localStorage.getItem("v_d_bonus") == "true"){
+        v_d_bonus.classList.add("active_button");
+    }
+    else {
+        v_d_bonus.classList.remove("active_button");
     }
     if (localStorage.getItem("v_fouls") != null){
         visitor_fouls = parseInt(localStorage.getItem("v_fouls"));
@@ -1025,6 +1176,12 @@ function load_data() {
     else {
         show_foul.classList.add("active_button");
     }
+    if (localStorage.getItem("show_tol") == "false") {
+        show_tol.classList.remove("active_button");
+    }
+    else {
+        show_tol.classList.add("active_button");
+    }
     if (localStorage.getItem("sides") == "true") {
         switch_sides.classList.add("active_button");
     }
@@ -1109,7 +1266,7 @@ function getCookie(cname) {
     return "N/A";
 }
 function play_music(){
-    var r = Math.floor((Math.random() * (num_music - 1))+ 1);
+    var r = Math.floor((Math.random() * num_music)+ 1);
     try {
         audio.pause();
     }
@@ -1206,6 +1363,26 @@ function change_colors() {
     v_foul_m1.style.backgroundColor='rgba('+v_color[0]+','+v_color[1]+','+v_color[2]+', 0.15)';
     v_tol_p1.style.backgroundColor='rgba('+v_color[0]+','+v_color[1]+','+v_color[2]+', 0.15)';
     v_tol_m1.style.backgroundColor='rgba('+v_color[0]+','+v_color[1]+','+v_color[2]+', 0.15)';
+    if ((h_bonus.classList.contains("active_button"))) {
+        h_bonus.style.backgroundColor='rgba(0,0,0, 0.15)';
+    } else {
+        h_bonus.style.backgroundColor='rgba('+h_color[0]+','+h_color[1]+','+h_color[2]+', 0.15)';
+    }
+    if ((h_d_bonus.classList.contains("active_button"))) {
+        h_d_bonus.style.backgroundColor='rgba(0,0,0, 0.15)';
+    } else {
+        h_d_bonus.style.backgroundColor='rgba('+h_color[0]+','+h_color[1]+','+h_color[2]+', 0.15)';
+    }
+    if ((v_bonus.classList.contains("active_button"))) {
+        v_bonus.style.backgroundColor='rgba(0,0,0, 0.15)';
+    } else {
+        v_bonus.style.backgroundColor='rgba('+v_color[0]+','+v_color[1]+','+v_color[2]+', 0.15)';
+    }
+    if ((v_d_bonus.classList.contains("active_button"))) {
+        v_d_bonus.style.backgroundColor='rgba(0,0,0, 0.15)';
+    } else {
+        v_d_bonus.style.backgroundColor='rgba('+v_color[0]+','+v_color[1]+','+v_color[2]+', 0.15)';
+    }
     bc.postMessage("h_r_color&"+h_color[0]);
     bc.postMessage("h_g_color&"+h_color[1]);
     bc.postMessage("h_b_color&"+h_color[2]);
