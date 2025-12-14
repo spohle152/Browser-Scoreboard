@@ -1,9 +1,9 @@
 * {
     font-family: "Bebas Neue", serif;
+    /* font-family: "Rationale", sans-serif; */
     font-weight: 400;
     font-style: normal;
-    -webkit-text-stroke: 0.2dvh black;
-    text-shadow: black 1dvh 1dvh 1dvh;
+    text-shadow: black 0dvh 0dvh 2dvh;
     align-items: center;
     justify-content: center;
     color: white;
@@ -24,7 +24,7 @@
 }
 body {
     overflow: hidden; /* Hide scrollbars */
-    background: linear-gradient(rgba(0, 0, 0, 0.85) 50%, rgba(0, 0, 0, 0.85)), url("background.jpg");
+    background: linear-gradient(rgba(0, 0, 0, 1) 50%, rgba(0, 0, 0, 1)), url("background.jpg");
     background-size: cover;
 }
 html {
@@ -52,28 +52,27 @@ html {
     text-align: center;
 }
 .left {
-    border-right: 3px solid white;
+    border-right: 1px solid white;
     height: 100%;
 }
 .right{
-    border-left: 3px solid white;
+    border-left: 1px solid white;
     height: 100%;
 }
 .time {
-    border-bottom: 3px solid white;
     height:100%;
-    background:rgba(255, 255, 0, 0.15);
 }
 .fouls {
-    border-top: 3px solid white;
-    border-left: 3px solid white;
-    border-right: 3px solid white;
-    background: rgba(255, 125, 0, 0.25);
+    border-top: 1px solid white;
+    border-left: 1px solid white;
+    border-right: 1px solid white;
     height:100%;
     transition: all 0.35s ease;
 }
 .top_side {
     display:block;
+    height:100%;
+    position:relative;
 }
 .top_side img {
     height:20dvh;
@@ -83,6 +82,18 @@ html {
 .top_side p {
     font-size: 9dvh;
     line-height: 9dvh;
+}
+.top_side h3 {
+    font-size: 12dvh;
+    position:absolute;
+    bottom: 0;
+}
+
+#left_team_name {
+    left: 1dvw;
+}
+#right_team_name {
+    right: 1dvw;
 }
 .time h1 {
     font-size: 45dvh;
@@ -216,9 +227,9 @@ html {
 .foul_label {
     transition: all 0.35s ease;
 }
-.period_team_names {
+.period {
     display: grid;
-    grid-template-columns: 1fr 2fr 1fr;
+    grid-template-columns: 1fr;
 }
 
 .team_intros {
@@ -248,4 +259,22 @@ html {
     text-align: center;
     font-size: 20dvh;
     transition: all 0.35s;
+}
+#middle_left {
+    border-top-left-radius: 2.25dvh;
+    border-top: 1px solid white;
+    border-left: 1px solid white;
+}
+#middle_right {
+    border-top-right-radius: 2.25dvh;
+    border-top: 1px solid white;
+    border-right: 1px solid white;
+}
+#bottom_left {
+    border-bottom: 1px solid white;
+    border-left: 1px solid white;
+}
+#bottom_right {
+    border-bottom: 1px solid white;
+    border-right: 1px solid white;
 }

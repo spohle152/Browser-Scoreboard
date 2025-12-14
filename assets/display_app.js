@@ -222,20 +222,20 @@ bc.onmessage = (event) => {
   } else if (event.data.split("&")[0] == "sides") {
       if (event.data.split("&")[1] == "true") {
         sides=true;
-        top_left.style.backgroundColor='rgba('+v_color[0]+','+v_color[1]+','+v_color[2]+', 0.15)';
-        middle_left.style.backgroundColor='rgba('+v_color[0]+','+v_color[1]+','+v_color[2]+', 0.15)';
-        bottom_left.style.backgroundColor='rgba('+v_color[0]+','+v_color[1]+','+v_color[2]+', 0.15)';
-        top_right.style.backgroundColor='rgba('+h_color[0]+','+h_color[1]+','+h_color[2]+', 0.15)';
-        middle_right.style.backgroundColor='rgba('+h_color[0]+','+h_color[1]+','+h_color[2]+', 0.15)';
-        bottom_right.style.backgroundColor='rgba('+h_color[0]+','+h_color[1]+','+h_color[2]+', 0.15)';
+        // top_left.style.backgroundColor='rgba('+v_color[0]+','+v_color[1]+','+v_color[2]+', 0.25)';
+        middle_left.style.backgroundColor='rgba('+v_color[0]+','+v_color[1]+','+v_color[2]+', 0.25)';
+        bottom_left.style.backgroundColor='rgba('+v_color[0]+','+v_color[1]+','+v_color[2]+', 0.25)';
+        // top_right.style.backgroundColor='rgba('+h_color[0]+','+h_color[1]+','+h_color[2]+', 0.25)';
+        middle_right.style.backgroundColor='rgba('+h_color[0]+','+h_color[1]+','+h_color[2]+', 0.25)';
+        bottom_right.style.backgroundColor='rgba('+h_color[0]+','+h_color[1]+','+h_color[2]+', 0.25)';
       } else {
         sides=false;
-        top_right.style.backgroundColor='rgba('+v_color[0]+','+v_color[1]+','+v_color[2]+', 0.15)';
-        middle_right.style.backgroundColor='rgba('+v_color[0]+','+v_color[1]+','+v_color[2]+', 0.15)';
-        bottom_right.style.backgroundColor='rgba('+v_color[0]+','+v_color[1]+','+v_color[2]+', 0.15)';
-        top_left.style.backgroundColor='rgba('+h_color[0]+','+h_color[1]+','+h_color[2]+', 0.15)';
-        middle_left.style.backgroundColor='rgba('+h_color[0]+','+h_color[1]+','+h_color[2]+', 0.15)';
-        bottom_left.style.backgroundColor='rgba('+h_color[0]+','+h_color[1]+','+h_color[2]+', 0.15)';
+        // top_right.style.backgroundColor='rgba('+v_color[0]+','+v_color[1]+','+v_color[2]+', 0.25)';
+        middle_right.style.backgroundColor='rgba('+v_color[0]+','+v_color[1]+','+v_color[2]+', 0.25)';
+        bottom_right.style.backgroundColor='rgba('+v_color[0]+','+v_color[1]+','+v_color[2]+', 0.25)';
+        // top_left.style.backgroundColor='rgba('+h_color[0]+','+h_color[1]+','+h_color[2]+', 0.25)';
+        middle_left.style.backgroundColor='rgba('+h_color[0]+','+h_color[1]+','+h_color[2]+', 0.25)';
+        bottom_left.style.backgroundColor='rgba('+h_color[0]+','+h_color[1]+','+h_color[2]+', 0.25)';
       }
   } else if (event.data.split("&")[0] == "home_name") {
     if (!sides) {

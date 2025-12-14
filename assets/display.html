@@ -5,6 +5,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Saira:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rationale&family=Saira:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
     <title>Scoreboard</title>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -12,21 +15,23 @@
 </head>
 <body>
     <div class="top">
-        <div class="left top_side" id="top_left">
+        <div class="top_side" id="top_left">
             <img style="transform: scaleX(-1);" src="inactive_possession.png" id="left_possession" alt="left_possession"><br>
             <p id="left_bonus"></p>
+            <h3 id="left_team_name">Home</h3>
         </div>
         <div class="time">
             <h1 id="clock">8:00</h1>
-            <div class="period_team_names">
-                <h3 id="left_team_name">Home</h3>
+            <div class="period">
+                <!-- <h3 id="left_team_name">Home</h3> -->
                 <h3 id="period">Period: 1</h3>
-                <h3 id="right_team_name">Away</h3>
+                <!-- <h3 id="right_team_name">Away</h3> -->
             </div>
         </div>
-        <div class="right top_side" id="top_right">
+        <div class="top_side" id="top_right">
             <img src="inactive_possession.png" id="right_possession"alt="right_possession"><br>
             <p id="right_bonus"></p>
+            <h3 id="right_team_name">Away</h3>
         </div>
     </div>
     <div class="middle">

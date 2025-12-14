@@ -8,7 +8,9 @@ var intros = document.getElementById('intros');
 var anthem = document.getElementById('anthem');
 var clear = document.getElementById('clear');
 var buzzer = document.getElementById('buzzer');
-var timeout = document.getElementById('timeout');
+var timeoutThirty = document.getElementById('timeoutThirty');
+var timeoutFourtyFive = document.getElementById('timeoutFourtyFive');
+var timeoutMinute = document.getElementById('timeoutMinute');
 //Period
 var m_per = document.getElementById('m_per');
 var p_per = document.getElementById('p_per');
@@ -102,11 +104,17 @@ var v_color = [255, 255, 255];
 var player_foul = null;
 var clock_interval;
 var audio = new Audio('assets/Music/audio-1.mp3');
-var intro = new Audio ('assets/intros-0.mp3');
+var intro = new Audio ('assets/Intros/audio-1.mp3');
 var anthem_music = new Audio ('assets/anthem.mp3');
 var buzzer_audio = new Audio('assets/buzzer.mp3');
 var long_buzzer_audio = new Audio('assets/long_buzzer.mp3');
-var timeoutId;
+var timeoutThirtyId;
+var timeoutFourtyId;
+var timeoutMinuteId;
+var secondsLeft1;
+var secondsLeft2;
+var secondsLeft3;
+var foulTimeoutId;
 var clear_audio_interval;
 const bc = new BroadcastChannel("channel");
 var iframe = document.getElementById("preview");
@@ -178,6 +186,10 @@ document.addEventListener('keydown', (event) => {
         if (min != 0 || sec != 0 || tenth != 0) {
             time_in_time_out();
         }
+    } else if (keysPressed['Control'] && !(time_in.classList.contains("active_button")) && event.key == '2'){
+        time_in_time_out();
+    } else if (event.key == '1' && time_in.classList.contains("active_button") && keysPressed['Control']){
+        time_in_time_out();
     } else if (event.key == 'Enter') {
         if (document.activeElement == countdown_time) {
             countdown.classList.add("active_button");
@@ -339,15 +351,6 @@ document.addEventListener('keydown', (event) => {
                 h_m1.classList.add("active_button");
                 update_data();
                 document.activeElement.blur();
-            }
-        }
-        else if (event.key == 't') {
-            if (timeout.classList.contains("active_button")) {
-                timeout.classList.remove("active_button");
-                clearTimeout(timeoutId);
-            } else {
-                timeout.classList.add("active_button");
-                timeoutId = setTimeout(short_buzzer, 30000);
             }
         }
     }
@@ -552,13 +555,25 @@ buzzer.addEventListener("click", function() {
     buzzer_audio.currentTime = 0;
     buzzer_audio.play();
 });
-timeout.addEventListener("click", function() {
-    if (timeout.classList.contains("active_button")) {
-        timeout.classList.remove("active_button");
-        clearTimeout(timeoutId);
+timeoutThirty.addEventListener("click", function() {
+    if (timeoutThirty.classList.contains("active_button")) {
+        timeoutThirty.classList.remove("active_button");
+        timeoutThirty.innerHTML = "0:30 Timer";
+        clearTimeout(timeoutThirtyId);
     } else {
-        timeout.classList.add("active_button");
-        timeoutId = setTimeout(short_buzzer, 30000);
+        timeoutThirty.classList.add("active_button");
+        secondsLeft1 = 30;
+        timeoutThirty.innerHTML = "0:30";
+        timeoutThirtyId = setTimeout(decrease_counter, 1000);
+    }
+    function decrease_counter() {
+        secondsLeft1 -= 1;
+        timeoutThirty.innerHTML = "0:" + String(secondsLeft1).padStart(2, '0');
+        if (secondsLeft1 > 0) {
+            timeoutThirtyId = setTimeout(decrease_counter, 1000);
+        } else {
+            timeoutThirtyId = setTimeout(short_buzzer, 1)
+        }
     }
     function short_buzzer() {
         try {
@@ -569,7 +584,74 @@ timeout.addEventListener("click", function() {
         }
         buzzer_audio.currentTime = 0;
         buzzer_audio.play();
-        timeout.classList.remove("active_button");
+        timeoutThirty.innerHTML = "0:30 Timer";
+        timeoutThirty.classList.remove("active_button");
+    }
+});
+timeoutFourtyFive.addEventListener("click", function() {
+    if (timeoutFourtyFive.classList.contains("active_button")) {
+        timeoutFourtyFive.classList.remove("active_button");
+        timeoutFourtyFive.innerHTML = "0:45 Timer";
+        clearTimeout(timeoutFourtyFiveId);
+    } else {
+        timeoutFourtyFive.classList.add("active_button");
+        timeoutFourtyFive.innerHTML = "0:45";
+        secondsLeft2 = 45
+        timeoutFourtyFiveId = setTimeout(decrease_counter, 1000);
+    }
+    function decrease_counter() {
+        secondsLeft2 -= 1;
+        timeoutFourtyFive.innerHTML = "0:" + String(secondsLeft2).padStart(2, '0');
+        if (secondsLeft2 > 0) {
+            timeoutFourtyFiveId = setTimeout(decrease_counter, 1000);
+        } else {
+            timeoutFourtyFiveId = setTimeout(short_buzzer, 1)
+        }
+    }
+    function short_buzzer() {
+        try {
+            buzzer_audio.pause();
+        }
+        catch (e) {
+            console.log(e);
+        }
+        buzzer_audio.currentTime = 0;
+        buzzer_audio.play();
+        timeoutFourtyFive.innerHTML = "0:45 Timer";
+        timeoutFourtyFive.classList.remove("active_button");
+    }
+});
+timeoutMinute.addEventListener("click", function() {
+    if (timeoutMinute.classList.contains("active_button")) {
+        timeoutMinute.classList.remove("active_button");
+        timeoutMinute.innerHTML = "1:00 Timer";
+        clearTimeout(timeoutMinuteId);
+    } else {
+        timeoutMinute.classList.add("active_button");
+        secondsLeft3 = 60;
+        timeoutMinute.innerHTML = "1:00"
+        timeoutMinuteId = setTimeout(decrease_counter, 1000);
+    }
+    function decrease_counter() {
+        secondsLeft3 -= 1;
+        timeoutMinute.innerHTML = "0:" + String(secondsLeft3).padStart(2, '0');
+        if (secondsLeft3 > 0) {
+            timeoutMinuteId = setTimeout(decrease_counter, 1000);
+        } else {
+            timeoutMinuteId = setTimeout(short_buzzer, 1)
+        }
+    }
+    function short_buzzer() {
+        try {
+            buzzer_audio.pause();
+        }
+        catch (e) {
+            console.log(e);
+        }
+        buzzer_audio.currentTime = 0;
+        buzzer_audio.play();
+        timeoutMinute.innerHTML = "1:00 Timer"
+        timeoutMinute.classList.remove("active_button");
     }
 });
 m_per.addEventListener("click", function() {
@@ -630,7 +712,8 @@ v_m1.addEventListener("click", function() {
 h_foul_p1.addEventListener("click", function() {
     player_foul = window.prompt("Player#-#Fouls","00-0");
     if (player_foul != null && player_foul != "") {
-        setTimeout(clear_player_foul, 30000);
+        clearTimeout(foulTimeoutId);
+        foulTimeoutId = setTimeout(clear_player_foul, 30000);
     }
     home_fouls++;
     update_data();
@@ -643,7 +726,8 @@ h_foul_m1.addEventListener("click", function() {
 v_foul_p1.addEventListener("click", function() {
     player_foul = window.prompt("Player#-#Fouls","00-0");
     if (player_foul != null && player_foul != "") {
-        setTimeout(clear_player_foul, 30000);
+        clearTimeout(foulTimeoutId);
+        foulTimeoutId = setTimeout(clear_player_foul, 30000);
     }
     visitor_fouls++;
     update_data();
@@ -1296,8 +1380,6 @@ function updateTime() {
             long_buzzer_audio.currentTime = 0;
             long_buzzer_audio.play();
             clearInterval(clock_interval);
-            timeout.classList.add("active_button");
-            timeoutId = setTimeout(short_buzzer, 30000);
         } else {
             if (sec == 0 && min != 0 && tenth == 0) {
                 min-=1;
