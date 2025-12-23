@@ -91,9 +91,11 @@ html {
 
 #left_team_name {
     left: 1dvw;
+    white-space: nowrap;
 }
 #right_team_name {
     right: 1dvw;
+    white-space: nowrap;
 }
 .time h1 {
     font-size: 45dvh;
