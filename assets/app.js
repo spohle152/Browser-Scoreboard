@@ -1,6 +1,6 @@
 //User Variables
-var num_music = 0;
-var num_intros = 0;
+var num_music = 40;
+var num_intros = 4;
 
 //Music and buzzer buttons
 var music = document.getElementById('music');
@@ -138,6 +138,9 @@ for (team = 0; team < teams.length; team += 1) {
 }
 
 bc.onmessage = (event) => {
+    if (event.data == "Update") {
+        update_data();
+    }
     if(event.data == "countdown_finished") {
         try {
             long_buzzer_audio.pause();
@@ -1047,20 +1050,6 @@ function update_data() {
         bc.postMessage("visitor_name&"+v_name.value);
         localStorage.setItem("visitor_name", v_name.value);
         bc.postMessage("period&"+period);
-        // if (home_fouls >= 10) {
-        //     bc.postMessage("away_b&B+");
-        // } else if (home_fouls >= 7) {
-        //     bc.postMessage("away_b&B");
-        // } else {
-        //     bc.postMessage("away_b& ")
-        // }
-        // if (visitor_fouls >= 10) {
-        //     bc.postMessage("home_b&B+")
-        // } else if (visitor_fouls >= 7) {
-        //     bc.postMessage("home_b&B");
-        // } else {
-        //     bc.postMessage("home_b& ");
-        // }
         bc.postMessage("home_score&"+home_score);
         bc.postMessage("away_score&"+visitor_score);
         bc.postMessage("home_tol&"+home_tol);
@@ -1278,8 +1267,8 @@ function load_data() {
         bc.postMessage("h_r_color&"+h_color[0]);
     }
     else {
-        h_color[0] = 0;
-        h_r_color.value = 0;
+        h_color[0] = 255;
+        h_r_color.value = 255;
         bc.postMessage("h_r_color&"+h_color[0]);
     }
     if (localStorage.getItem("h_g_color") != null) {
@@ -1298,8 +1287,8 @@ function load_data() {
         bc.postMessage("h_b_color&"+h_color[2]);
     }
     else {
-        h_color[2] = 0;
-        h_b_color.value = 0;
+        h_color[2] = 255;
+        h_b_color.value = 255;
         bc.postMessage("h_b_color&"+h_color[2]);
     }
     if (localStorage.getItem("v_r_color") != null) {
@@ -1322,7 +1311,7 @@ function load_data() {
         v_g_color.value = 255;
         bc.postMessage("v_g_color&"+v_color[1]);
     }
-    if (localStorage.getItem("h_b_color") != null) {
+    if (localStorage.getItem("v_b_color") != null) {
         v_color[2] = parseInt(localStorage.getItem("v_b_color"));
         v_b_color.value = parseInt(localStorage.getItem("v_b_color"));
         bc.postMessage("v_b_color&"+v_color[2]);
@@ -1421,49 +1410,49 @@ function clear_player_foul() {
     update_data();
 }
 function change_colors() {
-    h_name.style.backgroundColor='rgba('+h_color[0]+','+h_color[1]+','+h_color[2]+', 0.15)';
-    h_r_color.style.backgroundColor='rgba('+h_color[0]+','+h_color[1]+','+h_color[2]+', 0.15)';
-    h_g_color.style.backgroundColor='rgba('+h_color[0]+','+h_color[1]+','+h_color[2]+', 0.15)';
-    h_b_color.style.backgroundColor='rgba('+h_color[0]+','+h_color[1]+','+h_color[2]+', 0.15)';
-    h_p3.style.backgroundColor='rgba('+h_color[0]+','+h_color[1]+','+h_color[2]+', 0.15)';
-    h_p2.style.backgroundColor='rgba('+h_color[0]+','+h_color[1]+','+h_color[2]+', 0.15)';
-    h_p1.style.backgroundColor='rgba('+h_color[0]+','+h_color[1]+','+h_color[2]+', 0.15)';
-    h_m1.style.backgroundColor='rgba('+h_color[0]+','+h_color[1]+','+h_color[2]+', 0.15)';
-    h_foul_p1.style.backgroundColor='rgba('+h_color[0]+','+h_color[1]+','+h_color[2]+', 0.15)';
-    h_foul_m1.style.backgroundColor='rgba('+h_color[0]+','+h_color[1]+','+h_color[2]+', 0.15)';
-    h_tol_p1.style.backgroundColor='rgba('+h_color[0]+','+h_color[1]+','+h_color[2]+', 0.15)';
-    h_tol_m1.style.backgroundColor='rgba('+h_color[0]+','+h_color[1]+','+h_color[2]+', 0.15)';
-    v_name.style.backgroundColor='rgba('+v_color[0]+','+v_color[1]+','+v_color[2]+', 0.15)';
-    v_r_color.style.backgroundColor='rgba('+v_color[0]+','+v_color[1]+','+v_color[2]+', 0.15)';
-    v_g_color.style.backgroundColor='rgba('+v_color[0]+','+v_color[1]+','+v_color[2]+', 0.15)';
-    v_b_color.style.backgroundColor='rgba('+v_color[0]+','+v_color[1]+','+v_color[2]+', 0.15)';
-    v_p3.style.backgroundColor='rgba('+v_color[0]+','+v_color[1]+','+v_color[2]+', 0.15)';
-    v_p2.style.backgroundColor='rgba('+v_color[0]+','+v_color[1]+','+v_color[2]+', 0.15)';
-    v_p1.style.backgroundColor='rgba('+v_color[0]+','+v_color[1]+','+v_color[2]+', 0.15)';
-    v_m1.style.backgroundColor='rgba('+v_color[0]+','+v_color[1]+','+v_color[2]+', 0.15)';
-    v_foul_p1.style.backgroundColor='rgba('+v_color[0]+','+v_color[1]+','+v_color[2]+', 0.15)';
-    v_foul_m1.style.backgroundColor='rgba('+v_color[0]+','+v_color[1]+','+v_color[2]+', 0.15)';
-    v_tol_p1.style.backgroundColor='rgba('+v_color[0]+','+v_color[1]+','+v_color[2]+', 0.15)';
-    v_tol_m1.style.backgroundColor='rgba('+v_color[0]+','+v_color[1]+','+v_color[2]+', 0.15)';
+    h_name.style.backgroundColor='rgba('+h_color[0]+','+h_color[1]+','+h_color[2]+', 0.35)';
+    h_r_color.style.backgroundColor='rgba('+h_color[0]+','+h_color[1]+','+h_color[2]+', 0.35)';
+    h_g_color.style.backgroundColor='rgba('+h_color[0]+','+h_color[1]+','+h_color[2]+', 0.35)';
+    h_b_color.style.backgroundColor='rgba('+h_color[0]+','+h_color[1]+','+h_color[2]+', 0.35)';
+    h_p3.style.backgroundColor='rgba('+h_color[0]+','+h_color[1]+','+h_color[2]+', 0.35)';
+    h_p2.style.backgroundColor='rgba('+h_color[0]+','+h_color[1]+','+h_color[2]+', 0.35)';
+    h_p1.style.backgroundColor='rgba('+h_color[0]+','+h_color[1]+','+h_color[2]+', 0.35)';
+    h_m1.style.backgroundColor='rgba('+h_color[0]+','+h_color[1]+','+h_color[2]+', 0.35)';
+    h_foul_p1.style.backgroundColor='rgba('+h_color[0]+','+h_color[1]+','+h_color[2]+', 0.35)';
+    h_foul_m1.style.backgroundColor='rgba('+h_color[0]+','+h_color[1]+','+h_color[2]+', 0.35)';
+    h_tol_p1.style.backgroundColor='rgba('+h_color[0]+','+h_color[1]+','+h_color[2]+', 0.35)';
+    h_tol_m1.style.backgroundColor='rgba('+h_color[0]+','+h_color[1]+','+h_color[2]+', 0.35)';
+    v_name.style.backgroundColor='rgba('+v_color[0]+','+v_color[1]+','+v_color[2]+', 0.35)';
+    v_r_color.style.backgroundColor='rgba('+v_color[0]+','+v_color[1]+','+v_color[2]+', 0.35)';
+    v_g_color.style.backgroundColor='rgba('+v_color[0]+','+v_color[1]+','+v_color[2]+', 0.35)';
+    v_b_color.style.backgroundColor='rgba('+v_color[0]+','+v_color[1]+','+v_color[2]+', 0.35)';
+    v_p3.style.backgroundColor='rgba('+v_color[0]+','+v_color[1]+','+v_color[2]+', 0.35)';
+    v_p2.style.backgroundColor='rgba('+v_color[0]+','+v_color[1]+','+v_color[2]+', 0.35)';
+    v_p1.style.backgroundColor='rgba('+v_color[0]+','+v_color[1]+','+v_color[2]+', 0.35)';
+    v_m1.style.backgroundColor='rgba('+v_color[0]+','+v_color[1]+','+v_color[2]+', 0.35)';
+    v_foul_p1.style.backgroundColor='rgba('+v_color[0]+','+v_color[1]+','+v_color[2]+', 0.35)';
+    v_foul_m1.style.backgroundColor='rgba('+v_color[0]+','+v_color[1]+','+v_color[2]+', 0.35)';
+    v_tol_p1.style.backgroundColor='rgba('+v_color[0]+','+v_color[1]+','+v_color[2]+', 0.35)';
+    v_tol_m1.style.backgroundColor='rgba('+v_color[0]+','+v_color[1]+','+v_color[2]+', 0.35)';
     if ((h_bonus.classList.contains("active_button"))) {
-        h_bonus.style.backgroundColor='rgba(0,0,0, 0.15)';
+        h_bonus.style.backgroundColor='rgba(0,0,0, 0.35)';
     } else {
-        h_bonus.style.backgroundColor='rgba('+h_color[0]+','+h_color[1]+','+h_color[2]+', 0.15)';
+        h_bonus.style.backgroundColor='rgba('+h_color[0]+','+h_color[1]+','+h_color[2]+', 0.35)';
     }
     if ((h_d_bonus.classList.contains("active_button"))) {
-        h_d_bonus.style.backgroundColor='rgba(0,0,0, 0.15)';
+        h_d_bonus.style.backgroundColor='rgba(0,0,0, 0.35)';
     } else {
-        h_d_bonus.style.backgroundColor='rgba('+h_color[0]+','+h_color[1]+','+h_color[2]+', 0.15)';
+        h_d_bonus.style.backgroundColor='rgba('+h_color[0]+','+h_color[1]+','+h_color[2]+', 0.35)';
     }
     if ((v_bonus.classList.contains("active_button"))) {
-        v_bonus.style.backgroundColor='rgba(0,0,0, 0.15)';
+        v_bonus.style.backgroundColor='rgba(0,0,0, 0.35)';
     } else {
-        v_bonus.style.backgroundColor='rgba('+v_color[0]+','+v_color[1]+','+v_color[2]+', 0.15)';
+        v_bonus.style.backgroundColor='rgba('+v_color[0]+','+v_color[1]+','+v_color[2]+', 0.35)';
     }
     if ((v_d_bonus.classList.contains("active_button"))) {
-        v_d_bonus.style.backgroundColor='rgba(0,0,0, 0.15)';
+        v_d_bonus.style.backgroundColor='rgba(0,0,0, 0.35)';
     } else {
-        v_d_bonus.style.backgroundColor='rgba('+v_color[0]+','+v_color[1]+','+v_color[2]+', 0.15)';
+        v_d_bonus.style.backgroundColor='rgba('+v_color[0]+','+v_color[1]+','+v_color[2]+', 0.35)';
     }
     bc.postMessage("h_r_color&"+h_color[0]);
     bc.postMessage("h_g_color&"+h_color[1]);

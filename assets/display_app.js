@@ -32,6 +32,8 @@ var foul_labels = document.getElementsByClassName('foul_label');
 var tol_labels = document.getElementsByClassName('tol_label');
 var player_fouls_container = document.getElementById('player_fouls_container');
 var bottom = document.getElementsByClassName('bottom');
+var pictures = document.getElementById('pictures');
+var picture = document.getElementById('picture');
 const bc = new BroadcastChannel("channel");
 var sides = false;
 var show_score = true;
@@ -48,6 +50,10 @@ var clock_interval;
 var buzzer_audio = new Audio('buzzer.mp3');
 var long_buzzer_audio = new Audio('long_buzzer.mp3');
 var timeoutId;
+
+window.addEventListener('load', function(event) {
+  bc.postMessage("Update");
+});
 
 bc.onmessage = (event) => {
   if(event.data == "Cover") {
@@ -222,20 +228,16 @@ bc.onmessage = (event) => {
   } else if (event.data.split("&")[0] == "sides") {
       if (event.data.split("&")[1] == "true") {
         sides=true;
-        // top_left.style.backgroundColor='rgba('+v_color[0]+','+v_color[1]+','+v_color[2]+', 0.25)';
-        middle_left.style.backgroundColor='rgba('+v_color[0]+','+v_color[1]+','+v_color[2]+', 0.25)';
-        bottom_left.style.backgroundColor='rgba('+v_color[0]+','+v_color[1]+','+v_color[2]+', 0.25)';
-        // top_right.style.backgroundColor='rgba('+h_color[0]+','+h_color[1]+','+h_color[2]+', 0.25)';
-        middle_right.style.backgroundColor='rgba('+h_color[0]+','+h_color[1]+','+h_color[2]+', 0.25)';
-        bottom_right.style.backgroundColor='rgba('+h_color[0]+','+h_color[1]+','+h_color[2]+', 0.25)';
+        middle_left.style.backgroundColor='rgba('+v_color[0]+','+v_color[1]+','+v_color[2]+', 0.5)';
+        bottom_left.style.backgroundColor='rgba('+v_color[0]+','+v_color[1]+','+v_color[2]+', 0.5)';
+        middle_right.style.backgroundColor='rgba('+h_color[0]+','+h_color[1]+','+h_color[2]+', 0.5)';
+        bottom_right.style.backgroundColor='rgba('+h_color[0]+','+h_color[1]+','+h_color[2]+', 0.5)';
       } else {
         sides=false;
-        // top_right.style.backgroundColor='rgba('+v_color[0]+','+v_color[1]+','+v_color[2]+', 0.25)';
-        middle_right.style.backgroundColor='rgba('+v_color[0]+','+v_color[1]+','+v_color[2]+', 0.25)';
-        bottom_right.style.backgroundColor='rgba('+v_color[0]+','+v_color[1]+','+v_color[2]+', 0.25)';
-        // top_left.style.backgroundColor='rgba('+h_color[0]+','+h_color[1]+','+h_color[2]+', 0.25)';
-        middle_left.style.backgroundColor='rgba('+h_color[0]+','+h_color[1]+','+h_color[2]+', 0.25)';
-        bottom_left.style.backgroundColor='rgba('+h_color[0]+','+h_color[1]+','+h_color[2]+', 0.25)';
+        middle_right.style.backgroundColor='rgba('+v_color[0]+','+v_color[1]+','+v_color[2]+', 0.5)';
+        bottom_right.style.backgroundColor='rgba('+v_color[0]+','+v_color[1]+','+v_color[2]+', 0.5)';
+        middle_left.style.backgroundColor='rgba('+h_color[0]+','+h_color[1]+','+h_color[2]+', 0.5)';
+        bottom_left.style.backgroundColor='rgba('+h_color[0]+','+h_color[1]+','+h_color[2]+', 0.5)';
       }
   } else if (event.data.split("&")[0] == "home_name") {
     if (!sides) {
@@ -294,7 +296,17 @@ bc.onmessage = (event) => {
     }, 350);
   } else if (event.data.split("&")[0] == "intro_off") {
     team_intros.style.opacity = 0;
-  } 
+  } else if (event.data.split("&")[0] == "picture_on") {
+    picture.style.opacity = 0;
+    setTimeout(function() {
+      picture.src = "Pictures/pictures-" + event.data.split("&")[1] + ".jpg";
+      picture.style.opacity = 1;
+      pictures.style.opacity = 1;
+    }, 280);
+  } else if (event.data.split("&")[0] == "picture_off") {
+    pictures.style.opacity = 0;
+  }
+
 };
 
 function update_countdown() {

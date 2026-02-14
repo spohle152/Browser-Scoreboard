@@ -280,3 +280,22 @@ html {
     border-bottom: 1px solid white;
     border-right: 1px solid white;
 }
+
+.pictures {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    background: linear-gradient(rgba(0, 0, 0, 0.75) 50%, rgba(0, 0, 0, 0.75)), url("background.jpg");
+    background-size: cover;
+    height: 100dvh;
+    width: 100dvw;
+    z-index: 4;
+    transition: all 1s ease;
+}
+
+.picture_picture {
+    max-width: 100%;
+    height: auto;
+    transition: all 1s ease;
+}
