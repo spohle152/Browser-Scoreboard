@@ -1,4 +1,4 @@
-var num_pictures = 1
+var num_pictures = 2
 var cards = [];
 
 const bc = new BroadcastChannel("channel");

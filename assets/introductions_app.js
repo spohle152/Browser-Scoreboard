@@ -7,6 +7,11 @@ var cards = [];
 
 const bc = new BroadcastChannel("channel");
 var body = document.getElementById('body');
+var intros = document.getElementById('intros');
+
+intros.addEventListener("click", function() {
+    bc.postMessage("intro_music");
+});
 
 for (player = 0; player < teamsFile.length; player += 1) {
     if (teams.find((element) => element == teamsFile[player].TeamName) == null) {

@@ -14,8 +14,8 @@
 <div class="main">
     <div class="header">
         <div>
-            <div class="audio"><button id="music">Music</button></div>
-            <div class="audio"><button id="intros">Introductions</button></div>
+            <div class="audio"><button id="music">Intermission Music</button></div>
+            <div class="audio"><button id="intros">Introduction Music</button></div>
             <div class="audio"><button id="anthem">National Anthem</button></div>
             <div class="audio"><button id="clear">Clear Audio</button></div>
         </div>
@@ -24,11 +24,30 @@
             <div class="audio"><button id="timeoutThirty">0:30 Timer</button></div>
             <div class="audio"><button id="timeoutFourtyFive">0:45 Timer</button></div>
             <div class="audio"><button id="timeoutMinute">1:00 Timer</button></div>
-
+        </div>
+        <div>
+            <div class="slidecontainer">
+                <p>Buzzer Volume</p>
+                <input type="range" min="0" max="100" class="slider" id="buzzervol">
+            </div>
+            <div class="slidecontainer">
+                <p>Music Volume</p>
+                <input type="range" min="0" max="100" class="slider" id="musicvol">
+            </div>
+            <div class="slidecontainer">
+                <p>Introductions Volume</p>
+                <input type="range" min="0" max="100" class="slider" id="introvol">
+            </div>
+            <div class="slidecontainer">
+                <p>Anthem Volume</p>
+                <input type="range" min="0" max="100" class="slider" id="anthemvol">
+            </div>
         </div>
         <div>
             <iframe id="preview" src="assets/display.html"></iframe>
         </div>
+    </div>
+    <div class="subheader">
         <div>
             <div><button id="show_score">Show Score</button></div>
         </div>

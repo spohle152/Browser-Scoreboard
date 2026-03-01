@@ -56,11 +56,29 @@ html {
 .header {
     padding-top: 10px;
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
     width: 100%;
     text-align: center;
 }
 .header button {
+    width: 80%;
+    max-width:300px;
+    justify-content: center;
+}
+.slidecontainer {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: 100%;
+    text-align: center;
+}
+.subheader {
+    padding-top: 10px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    width: 100%;
+    text-align: center;
+}
+.subheader button {
     width: 80%;
     max-width:300px;
     justify-content: center;
